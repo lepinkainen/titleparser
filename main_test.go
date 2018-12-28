@@ -16,7 +16,6 @@ func TestFindTitle(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{"ValidURL1", args{url: "https://www.iltalehti.fi/kotimaa/a/bb594cd9-f66c-4bca-b626-a54848ea6ffb"}, "”Teko on ollut yllättävä ja hyvin nopea” - jouluyön lapsisurman selvittely alkaa hahmottua, tämä kaikki murhenäytelmästä tiedetään nyt", false},
 		{"ValidURL2", args{url: "https://www.is.fi/taloussanomat/oma-raha/art-2000005935228.html"}, "Marko odottaa innolla talven sähkölaskuja – suosittu lämpöpumppu tuo jopa 1 500 euron säästön", false},
 		{"ValidURL3", args{url: "https://yle.fi/uutiset/3-10507654"}, "Jätteiden mukana palaa miljoonien edestä arvokkaita metalleja – tutkijat löysivät menetelmän, jolla ne voidaan saada talteen tuhkasta", false},
 		{"No opengraph", args{url: "https://www.manttavilppula.fi"}, "Taidekaupunki | Mänttä-Vilppula - Mänttä-Vilppula", false},
@@ -50,7 +49,6 @@ func TestHandleRequest(t *testing.T) {
 		want    TitleResponse
 		wantErr bool
 	}{
-		{"ValidURL1", args{query: TitleQuery{URL: "https://www.iltalehti.fi/kotimaa/a/bb594cd9-f66c-4bca-b626-a54848ea6ffb"}}, TitleResponse{Title: "”Teko on ollut yllättävä ja hyvin nopea” - jouluyön lapsisurman selvittely alkaa hahmottua, tämä kaikki murhenäytelmästä tiedetään nyt"}, false},
 		{"CustomYle", args{query: TitleQuery{URL: "https://areena.yle.fi/1-4192173"}}, TitleResponse{Title: "Areena custom handler"}, false},
 		{"CustomApina", args{query: TitleQuery{URL: "https://apina.biz/167922"}}, TitleResponse{Title: ""}, false},
 	}

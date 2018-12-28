@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
 	"titleparser/handler"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -19,7 +20,21 @@ var (
 	ErrTitleNotFound = errors.New("No title found from URL")
 	// ErrNotHTML is returned when the source url is not of type text/html
 	ErrNotHTML = errors.New("Source url is not HTML")
+
+	handlerFunctions = make(map[string]func(string) (string, error))
 )
+
+type TitleQuery struct {
+	User    string `json:"user"`
+	Channel string `json:"channel"`
+	URL     string `json:"url"`
+}
+
+type TitleResponse struct {
+	Title string `json:"title"`
+}
+
+type handlerFunc func(string) (string, error)
 
 func collyError(r *colly.Response, err error) {
 	fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
@@ -79,16 +94,6 @@ func FindTitle(url string) (string, error) {
 	}
 }
 
-type TitleQuery struct {
-	User    string `json:"user"`
-	Channel string `json:"channel"`
-	URL     string `json:"url"`
-}
-
-type TitleResponse struct {
-	Title string `json:"title"`
-}
-
 // CheckCache will return a non-empty string if the URL given is in the cache
 func CheckCache(query TitleQuery) string {
 	// TODO:
@@ -106,6 +111,11 @@ func CacheAndReturn(query TitleQuery, title string, err error) (TitleResponse, e
 	return TitleResponse{Title: title}, err
 }
 
+// RegisterParser adds the given url parser and pattern to the map of handlers
+func RegisterParser(pattern string, function handlerFunc) {
+	handlerFunctions[pattern] = function
+}
+
 // HandleRequest is the function entry point
 func HandleRequest(ctx context.Context, query TitleQuery) (TitleResponse, error) {
 
@@ -114,28 +124,26 @@ func HandleRequest(ctx context.Context, query TitleQuery) (TitleResponse, error)
 		return CacheAndReturn(query, title, nil)
 	}
 
-	// https://golang.org/pkg/path/filepath/#Match
-	handlerFunctions := make(map[string]func(string) (string, error))
-
-	handlerFunctions[".*?areena.yle.fi/.*"] = handler.YleAreena
-	handlerFunctions[".*?apina.biz.*"] = handler.ApinaBiz
+	// register custom parsers
+	RegisterParser(".*?areena.yle.fi/.*", handler.YleAreena)
+	RegisterParser(".*?apina.biz.*", handler.ApinaBiz)
 
 	for pattern, handler := range handlerFunctions {
 		match, err := regexp.MatchString(pattern, query.URL)
 
-		// error in matching
+		// error in matching, log and continue
 		if err != nil {
-			fmt.Printf("Error matching with pattern %s", pattern)
-			return TitleResponse{Title: ""}, err
+			fmt.Printf("Error matching with pattern %s: %v", pattern, err)
 		}
 
-		// no error and match, run function to get actual title
+		// no error and match, run function to get actual title and return
 		if err == nil && match {
 			title, err := handler(query.URL)
 			return CacheAndReturn(query, title, err)
 		}
 	}
 
+	// custom parsers didn't match, use the default parser
 	url, err := FindTitle(query.URL)
 	return TitleResponse{Title: url}, err
 }
