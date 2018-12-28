@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -78,17 +79,68 @@ func FindTitle(url string) (string, error) {
 }
 
 type TitleQuery struct {
-	URL string `json:"url"`
+	User    string `json:"user"`
+	Channel string `json:"channel"`
+	URL     string `json:"url"`
 }
 
 type TitleResponse struct {
 	Title string `json:"title"`
 }
 
+// CheckCache will return a non-empty string if the URL given is in the cache
+func CheckCache(query TitleQuery) string {
+	// TODO:
+	// connect to dynamodb
+	// attempt to fetch url with query.URL
+	// return title
+	// optionally update ttl in DB
+	return ""
+}
+
+// CacheAndReturn inserts a successfully found title to cache
+func CacheAndReturn(query TitleQuery, title string, err error) (TitleResponse, error) {
+	// insert url to cache
+
+	return TitleResponse{Title: title}, err
+}
+
 // HandleRequest is the function entry point
 func HandleRequest(ctx context.Context, query TitleQuery) (TitleResponse, error) {
-	// TODO: Add url.specific handlers (map of regex, handler?)
+
+	// if query is cached, return from cache instead of fetching
+	if title := CheckCache(query); title != "" {
+		return CacheAndReturn(query, title, nil)
+	}
+
 	// https://golang.org/pkg/path/filepath/#Match
+	handlers := make(map[string]func(string) (string, error))
+
+	handlers[".*?areena.yle.fi/.*"] = func(url string) (string, error) {
+		return "Areena custom handler", nil
+	}
+
+	// the title is always useless here, return empty
+	handlers[".*?apina.biz.*"] = func(url string) (string, error) {
+		return "", nil
+	}
+
+	for pattern, handler := range handlers {
+		match, err := regexp.MatchString(pattern, query.URL)
+
+		// error in matching
+		if err != nil {
+			fmt.Printf("Error matching with pattern %s", pattern)
+			return TitleResponse{Title: ""}, err
+		}
+
+		// no error and match, run function to get actual title
+		if err == nil && match {
+			title, err := handler(query.URL)
+			return CacheAndReturn(query, title, err)
+		}
+	}
+
 	url, err := FindTitle(query.URL)
 	return TitleResponse{Title: url}, err
 }
