@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"titleparser/handler"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/gocolly/colly/extensions"
@@ -114,18 +115,12 @@ func HandleRequest(ctx context.Context, query TitleQuery) (TitleResponse, error)
 	}
 
 	// https://golang.org/pkg/path/filepath/#Match
-	handlers := make(map[string]func(string) (string, error))
+	handlerFunctions := make(map[string]func(string) (string, error))
 
-	handlers[".*?areena.yle.fi/.*"] = func(url string) (string, error) {
-		return "Areena custom handler", nil
-	}
+	handlerFunctions[".*?areena.yle.fi/.*"] = handler.YleAreena
+	handlerFunctions[".*?apina.biz.*"] = handler.ApinaBiz
 
-	// the title is always useless here, return empty
-	handlers[".*?apina.biz.*"] = func(url string) (string, error) {
-		return "", nil
-	}
-
-	for pattern, handler := range handlers {
+	for pattern, handler := range handlerFunctions {
 		match, err := regexp.MatchString(pattern, query.URL)
 
 		// error in matching
