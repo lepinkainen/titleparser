@@ -12,8 +12,7 @@ install:
   - go mod download
 
 env:
-  - GOOS=linux GOARCH=amd64
-  - GO111MODULE=on
+  - GOOS=linux GOARCH=amd64 GO111MODULE=on
 
 matrix:
   # It's ok if our code fails on unstable development versions of Go.
