@@ -8,7 +8,7 @@ clean:
 	rm -f $(FUNCNAME).zip
 
 test:
-	go test -v
+	go test -v ./...
 
 publish: test build
 	aws lambda update-function-code --function-name $(FUNCNAME) --zip-file fileb://$(FUNCNAME).zip
