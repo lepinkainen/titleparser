@@ -2,7 +2,7 @@ module titleparser
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.0 // indirect
-	github.com/antchfx/htmlquery v0.0.0-20181207070731-9784ecda34b7 // indirect
+	github.com/antchfx/htmlquery v0.0.0-20181228060131-db5c1236cbb4 // indirect
 	github.com/antchfx/xmlquery v0.0.0-20181223105952-355641961c92 // indirect
 	github.com/antchfx/xpath v0.0.0-20181208024549-4bbdf6db12aa // indirect
 	github.com/aws/aws-lambda-go v1.8.0
