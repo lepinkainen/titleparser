@@ -1,20 +1,19 @@
 language: go
 
 go:
-  - 1.9
-  - "1.10"
   - "1.11"
   - master
     
-before_install:
-  - go get -u gopkg.in/alecthomas/gometalinter.v2
-  - gometalinter.v2 --install
+#before_install:
+# - go get -u gopkg.in/alecthomas/gometalinter.v2
+# - gometalinter.v2 --install
   
 install:
   - go mod download
 
 env:
   - GOOS=linux GOARCH=amd64
+  - GO111MODULE=on
 
 matrix:
   # It's ok if our code fails on unstable development versions of Go.
@@ -32,4 +31,4 @@ before_script:
 script:
   #- test -z $(gofmt -s -l $GO_FILES)  # Fail if a .go file hasn't been formatted with gofmt
   - go test -v -race $PKGS            # Run all the tests with the race detector enabled
-  - gometalinter.v2 --vendor -D gas -D errcheck -D gocyclo ./...
+#  - gometalinter.v2 --vendor -D gas -D errcheck -D gocyclo ./...
