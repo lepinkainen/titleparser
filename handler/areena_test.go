@@ -2,7 +2,7 @@ package handler
 
 import "testing"
 
-func TestHandleAreena(t *testing.T) {
+func TestYleAreena(t *testing.T) {
 	type args struct {
 		url string
 	}
@@ -16,13 +16,13 @@ func TestHandleAreena(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := HandleAreena(tt.args.url)
+			got, err := YleAreena(tt.args.url)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("HandleAreena() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("YleAreena() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("HandleAreena() = %v, want %v", got, tt.want)
+				t.Errorf("YleAreena() = %v, want %v", got, tt.want)
 			}
 		})
 	}
