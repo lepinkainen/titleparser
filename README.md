@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lepinkainen/titleparser.svg?branch=master)](https://travis-ci.org/lepinkainen/titleparser)
+
 # titleparser
 
 A golang implementation of an URL title parser running in AWS Lambda
