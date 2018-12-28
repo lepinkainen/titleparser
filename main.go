@@ -87,22 +87,12 @@ type TitleResponse struct {
 
 // HandleRequest is the function entry point
 func HandleRequest(ctx context.Context, query TitleQuery) (TitleResponse, error) {
+	// TODO: Add url.specific handlers (map of regex, handler?)
+	// https://golang.org/pkg/path/filepath/#Match
 	url, err := FindTitle(query.URL)
 	return TitleResponse{Title: url}, err
 }
 
 func main() {
 	lambda.Start(HandleRequest)
-}
-
-func test() {
-
-	urls := []string{"https://www.iltalehti.fi/kotimaa/a/bb594cd9-f66c-4bca-b626-a54848ea6ffb",
-		"https://www.is.fi/taloussanomat/art-2000005940825.html?ref=rss",
-		"https://www.is.fi/taloussanomat/oma-raha/art-2000005935228.html"}
-
-	for _, url := range urls {
-		fmt.Println(FindTitle(url))
-
-	}
 }
