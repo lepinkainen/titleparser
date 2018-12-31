@@ -1,12 +1,10 @@
-package main
+package handler
 
 import (
-	"context"
-	"reflect"
 	"testing"
 )
 
-func TestFindTitle(t *testing.T) {
+func TestDefaultHandler(t *testing.T) {
 	type args struct {
 		url string
 	}
@@ -26,41 +24,13 @@ func TestFindTitle(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := FindTitle(tt.args.url)
+			got, err := DefaultHandler(tt.args.url)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("FindTitle() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DefaultHandler() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("FindTitle() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestHandleRequest(t *testing.T) {
-	type args struct {
-		ctx   context.Context
-		query TitleQuery
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    TitleResponse
-		wantErr bool
-	}{
-		{"CustomYle", args{query: TitleQuery{URL: "https://areena.yle.fi/1-4192173"}}, TitleResponse{Title: "Areena custom handler"}, false},
-		{"CustomApina", args{query: TitleQuery{URL: "https://apina.biz/167922"}}, TitleResponse{Title: ""}, false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := HandleRequest(tt.args.ctx, tt.args.query)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("HandleRequest() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("HandleRequest() = %v, want %v", got, tt.want)
+				t.Errorf("DefaultHandler() = %v, want %v", got, tt.want)
 			}
 		})
 	}

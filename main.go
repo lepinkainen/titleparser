@@ -2,114 +2,30 @@ package main
 
 import (
 	"context"
-	"errors"
-	"fmt"
+	"os"
 	"regexp"
-	"strings"
 
 	"titleparser/handler"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/gocolly/colly/extensions"
 
-	"github.com/gocolly/colly"
+	log "github.com/sirupsen/logrus"
 )
 
 var (
-	// ErrTitleNotFound is returned when the target resource doesn't have a title
-	ErrTitleNotFound = errors.New("No title found from URL")
-	// ErrNotHTML is returned when the source url is not of type text/html
-	ErrNotHTML = errors.New("Source url is not HTML")
-
 	handlerFunctions = make(map[string]func(string) (string, error))
 )
 
 type TitleQuery struct {
+	Added   int64  `json:"timestamp"`
 	User    string `json:"user"`
 	Channel string `json:"channel"`
 	URL     string `json:"url"`
-}
-
-type TitleResponse struct {
-	Title string `json:"title"`
+	Title   string `json:"title"`
+	TTL     int64  `json:"ttl"` // TTL is used to expire the item in DynamoDB automatically
 }
 
 type handlerFunc func(string) (string, error)
-
-func collyError(r *colly.Response, err error) {
-	fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
-}
-
-// FindTitle returns the title or opengraph title of the given url
-func FindTitle(url string) (string, error) {
-
-	var title string
-	var ogTitle string
-	var err error
-
-	// Instantiate default collector
-
-	c := colly.NewCollector()
-
-	c.IgnoreRobotsTxt = true
-	c.MaxBodySize = 1024 * 1024 // 1MB maximum
-
-	extensions.RandomUserAgent(c)
-
-	c.OnError(collyError)
-
-	// Before making a request print "Visiting ..."
-	c.OnResponse(func(r *colly.Response) {
-		contentType := r.Headers.Get("Content-Type")
-		if !strings.HasPrefix(contentType, "text/html") {
-			fmt.Printf("Invalid content type: %s\n", contentType)
-			err = ErrNotHTML
-		}
-	})
-
-	// Find the regular title
-	// <title>
-	c.OnHTML("title", func(e *colly.HTMLElement) {
-		title = e.Text
-	})
-
-	// Opengraph title
-	// <meta property="og:title" content="Title" />
-	c.OnHTML("meta", func(e *colly.HTMLElement) {
-		if !(e.Attr("property") == "og:title") {
-			return
-		}
-		ogTitle = e.Attr("content")
-	})
-
-	c.Visit(url)
-
-	// prefer og:title, since it tends to have less crap in it
-	if ogTitle != "" {
-		return ogTitle, err
-	} else if title != "" {
-		return title, err
-	} else {
-		return "", ErrTitleNotFound
-	}
-}
-
-// CheckCache will return a non-empty string if the URL given is in the cache
-func CheckCache(query TitleQuery) string {
-	// TODO:
-	// connect to dynamodb
-	// attempt to fetch url with query.URL
-	// return title
-	// optionally update ttl in DB
-	return ""
-}
-
-// CacheAndReturn inserts a successfully found title to cache
-func CacheAndReturn(query TitleQuery, title string, err error) (TitleResponse, error) {
-	// insert url to cache
-
-	return TitleResponse{Title: title}, err
-}
 
 // RegisterParser adds the given url parser and pattern to the map of handlers
 func RegisterParser(pattern string, function handlerFunc) {
@@ -117,23 +33,28 @@ func RegisterParser(pattern string, function handlerFunc) {
 }
 
 // HandleRequest is the function entry point
-func HandleRequest(ctx context.Context, query TitleQuery) (TitleResponse, error) {
+func HandleRequest(ctx context.Context, query TitleQuery) (TitleQuery, error) {
+
+	// open session to dynamoDB
+
+	log.Infof("Handling %v", query)
 
 	// if query is cached, return from cache instead of fetching
-	if title := CheckCache(query); title != "" {
+	if title, err := CheckCache(query); err == nil {
 		return CacheAndReturn(query, title, nil)
 	}
 
 	// register custom parsers
 	RegisterParser(".*?areena.yle.fi/.*", handler.YleAreena)
 	RegisterParser(".*?apina.biz.*", handler.ApinaBiz)
+	//RegisterParser(".*", handler.DefaultHandler)
 
 	for pattern, handler := range handlerFunctions {
 		match, err := regexp.MatchString(pattern, query.URL)
 
 		// error in matching, log and continue
 		if err != nil {
-			fmt.Printf("Error matching with pattern %s: %v", pattern, err)
+			log.Errorf("Error matching with pattern %s: %v", pattern, err)
 		}
 
 		// no error and match, run function to get actual title and return
@@ -144,8 +65,20 @@ func HandleRequest(ctx context.Context, query TitleQuery) (TitleResponse, error)
 	}
 
 	// custom parsers didn't match, use the default parser
-	url, err := FindTitle(query.URL)
-	return TitleResponse{Title: url}, err
+	title, err := handler.DefaultHandler(query.URL)
+	return CacheAndReturn(query, title, err)
+}
+
+func init() {
+	// Log as JSON instead of the default ASCII formatter.
+	log.SetFormatter(&log.JSONFormatter{})
+
+	// Output to stdout instead of the default stderr
+	// Can be any io.Writer, see below for File example
+	log.SetOutput(os.Stdout)
+
+	// Only log the warning severity or above.
+	log.SetLevel(log.InfoLevel)
 }
 
 func main() {
