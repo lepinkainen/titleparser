@@ -1,10 +1,12 @@
 package handler
 
+import "github.com/lepinkainen/titleparser/lambda"
+
+// YleAreena handler TBD
 func YleAreena(url string) (string, error) {
 	return "Areena custom handler", nil
 }
 
 func init() {
-	//fmt.Println("Areena initialized")
-	//	titleparser.RegisterHandler(YleAreena)
+	lambda.RegisterHandler(".*?areena.yle.fi/.*", YleAreena)
 }

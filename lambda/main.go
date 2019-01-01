@@ -6,8 +6,7 @@ import (
 	"regexp"
 
 	log "github.com/sirupsen/logrus"
-
-	"github.com/lepinkainen/titleparser/handler"
+	//"github.com/lepinkainen/titleparser/handler"
 )
 
 var (
@@ -25,8 +24,12 @@ type TitleQuery struct {
 
 type handlerFunc func(string) (string, error)
 
-// RegisterParser adds the given url parser and pattern to the map of handlers
-func RegisterParser(pattern string, function handlerFunc) {
+// RegisterHandler adds the given url parser and pattern to the map of handlers
+func RegisterHandler(pattern string, function handlerFunc) {
+	handlerFunctions[pattern] = function
+}
+
+func registerParser(pattern string, function handlerFunc) {
 	handlerFunctions[pattern] = function
 }
 
@@ -38,14 +41,9 @@ func HandleRequest(ctx context.Context, query TitleQuery) (TitleQuery, error) {
 	log.Infof("Handling %v", query)
 
 	// if query is cached, return from cache instead of fetching
-	if title, err := handler.CheckCache(query); err == nil {
-		return handler.CacheAndReturn(query, title, nil)
+	if title, err := CheckCache(query); err == nil {
+		return CacheAndReturn(query, title, nil)
 	}
-
-	// register custom parsers
-	RegisterParser(".*?areena.yle.fi/.*", handler.YleAreena)
-	RegisterParser(".*?apina.biz.*", handler.ApinaBiz)
-	//RegisterParser(".*", handler.DefaultHandler)
 
 	for pattern, handler := range handlerFunctions {
 		match, err := regexp.MatchString(pattern, query.URL)
@@ -63,7 +61,7 @@ func HandleRequest(ctx context.Context, query TitleQuery) (TitleQuery, error) {
 	}
 
 	// custom parsers didn't match, use the default parser
-	title, err := handler.DefaultHandler(query.URL)
+	title, err := DefaultHandler(query.URL)
 	return CacheAndReturn(query, title, err)
 }
 
