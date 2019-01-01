@@ -1,14 +1,14 @@
 FUNCNAME=titleparser
+BUILDDIR=build
 
-build: clean
-	env GOOS=linux GOARCH=amd64 go build -o $(FUNCNAME)
-	zip $(FUNCNAME).zip $(FUNCNAME)
+.PHONY: build
 
-clean:
-	rm -f $(FUNCNAME).zip
+build: test_silent
+	env GOOS=linux GOARCH=amd64 go build -o $(BUILDDIR)/$(FUNCNAME)
+	cd $(BUILDDIR) && zip $(FUNCNAME).zip $(FUNCNAME)
 
 test:
 	go test -v ./...
 
 publish: test build
-	aws lambda update-function-code --function-name $(FUNCNAME) --zip-file fileb://$(FUNCNAME).zip
+	aws lambda update-function-code --function-name $(FUNCNAME) --zip-file fileb://$(BUILDDIR)/$(FUNCNAME).zip

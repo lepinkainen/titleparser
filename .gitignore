@@ -2,3 +2,4 @@ test.sh
 titleparser
 titleparser.zip
 vendor/
+build/
