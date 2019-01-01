@@ -3,7 +3,7 @@ BUILDDIR=build
 
 .PHONY: build
 
-build: test_silent
+build: test
 	env GOOS=linux GOARCH=amd64 go build -o $(BUILDDIR)/$(FUNCNAME)
 	cd $(BUILDDIR) && zip $(FUNCNAME).zip $(FUNCNAME)
 
@@ -11,4 +11,4 @@ test:
 	go test -v ./...
 
 publish: test build
-	aws lambda update-function-code --function-name $(FUNCNAME) --zip-file fileb://$(BUILDDIR)/$(FUNCNAME).zip
+	aws lambda update-function-code --publish --function-name $(FUNCNAME) --zip-file fileb://$(BUILDDIR)/$(FUNCNAME).zip
