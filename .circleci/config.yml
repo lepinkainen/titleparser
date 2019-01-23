@@ -8,6 +8,7 @@ jobs: # basic units of work in a run
           GO111MODULE: "ON"
     steps: # steps that comprise the `build` job
       - checkout # check out source code to working directory
+      - run: mkdir -p /tmp/test-results # create the test results directory
 
       - restore_cache:
           keys:
@@ -25,3 +26,10 @@ jobs: # basic units of work in a run
           key: go-mod-v1-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
+
+      - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: /tmp/test-results
+          destination: raw-test-output
+
+      - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: /tmp/test-results
