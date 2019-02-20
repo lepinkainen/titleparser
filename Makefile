@@ -8,7 +8,8 @@ build: test
 	cd $(BUILDDIR) && zip $(FUNCNAME).zip $(FUNCNAME)
 
 test:
-	go test -v ./...
+	go vet ./...
+	go test -race -v ./...
 
 publish: test build
 	aws lambda update-function-code --publish --function-name $(FUNCNAME) --zip-file fileb://$(BUILDDIR)/$(FUNCNAME).zip
