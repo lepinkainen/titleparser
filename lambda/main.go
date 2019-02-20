@@ -29,9 +29,9 @@ func RegisterHandler(pattern string, function handlerFunc) {
 	handlerFunctions[pattern] = function
 }
 
-func registerParser(pattern string, function handlerFunc) {
-	handlerFunctions[pattern] = function
-}
+// func registerParser(pattern string, function handlerFunc) {
+// 	handlerFunctions[pattern] = function
+// }
 
 // HandleRequest is the function entry point
 func HandleRequest(ctx context.Context, query TitleQuery) (TitleQuery, error) {

@@ -30,7 +30,7 @@ func Verkkokauppa(url string) (string, error) {
 		return "", errors.Wrap(err, "Could not load HTML")
 	}
 
-	selection := doc.Find("h1.product__name-title")
+	selection := doc.Find("h1")
 	title := selection.Contents().Text()
 
 	return title, nil

@@ -18,7 +18,7 @@ func CheckCache(query TitleQuery) (string, error) {
 	// attempt to fetch url with query.URL
 	// return title
 	// optionally update ttl in DB
-	return "", errors.New("Cache miss")
+	return "", errors.New("cache miss")
 }
 
 // CacheAndReturn inserts a successfully found title to cache
@@ -32,6 +32,11 @@ func CacheAndReturn(query TitleQuery, title string, err error) (TitleQuery, erro
 		Region: aws.String("eu-west-1")},
 	)
 
+	if err != nil {
+		log.Errorf("could not connect to AWS %v", err)
+		return TitleQuery{}, err
+	}
+
 	// Create DynamoDB client
 	svc := dynamodb.New(sess)
 	// create a map for DD
@@ -42,6 +47,11 @@ func CacheAndReturn(query TitleQuery, title string, err error) (TitleQuery, erro
 	log.Infof("Storing TitleQuery: %v", query)
 
 	av, err := dynamodbattribute.MarshalMap(query)
+	if err != nil {
+		log.Errorf("error marshaling to dynamodb: %v", err)
+		return TitleQuery{}, err
+	}
+
 	// construct an input that DD canhandle
 	input := &dynamodb.PutItemInput{
 		Item:      av,
