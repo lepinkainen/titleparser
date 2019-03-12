@@ -47,16 +47,23 @@ func DefaultHandler(url string) (string, error) {
 	s := doc.Find(`meta[property="og:title"]`)
 	if s != nil && s.Size() > 0 {
 		title, _ := s.Attr("content")
-		return title, nil
+		return sanitize(title), nil
 	}
 
 	// Bleh, just a boring old title then
 	s = doc.Find("title")
 	if s != nil && s.Size() > 0 {
-		title := s.Contents().Text()
-		return title, nil
+		// Just grab the first one, some pages (ab)use the title element
+		title := s.First().Text()
+		return sanitize(title), nil
 	}
 
 	// No title, report it
 	return "", ErrTitleNotFound
+}
+
+// sanitize the url by removing everything superfluous
+func sanitize(title string) string {
+	title = strings.Trim(title, "")
+	return title
 }

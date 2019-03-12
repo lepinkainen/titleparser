@@ -20,6 +20,7 @@ func TestDefaultHandler(t *testing.T) {
 		{"No title", args{url: "http://addiktit.net"}, "", true},
 		{"URL looks like jpg but isn't", args{url: "http://kuvaton.com/browse/57101/fatcop.jpg"}, "fatcop.jpg", false},
 		{"Image", args{url: "https://i.imgur.com/r13Q6Yp.jpg"}, "", true},
+		{"Gog.com Diablo", args{url: "https://www.gog.com/game/diablo"}, "Diablo on GOG.com", false},
 		//{"Does not exist", args{url: "https://definitely-not-a.website/"}, "", true},
 	}
 	for _, tt := range tests {

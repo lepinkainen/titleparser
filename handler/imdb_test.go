@@ -13,10 +13,12 @@ func TestOMDB(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{"The Matrix",
-			args{url: "https://www.imdb.com/title/tt0133093/"},
-			"The Matrix (1999) [IMDb 8.7/10] [RT 88%] [Meta 73/100]",
-			false},
+		/*
+			{"The Matrix",
+				args{url: "https://www.imdb.com/title/tt0133093/"},
+				"The Matrix (1999) [IMDb 8.7/10] [RT 88%] [Meta 73/100]",
+				false},
+		*/
 		{"No ID in URL",
 			args{url: "https://www.imdb.com/"},
 			"",
