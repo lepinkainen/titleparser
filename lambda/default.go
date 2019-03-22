@@ -17,6 +17,8 @@ var (
 )
 
 // DefaultHandler is the fallback for sites that don't have a special handler
+// TODO: Split to two parts: 1) fetch url 2) parse title from html
+// 		 Tests for both parts
 func DefaultHandler(url string) (string, error) {
 	// Request the HTML page.
 	res, err := http.Get(url)
@@ -64,6 +66,6 @@ func DefaultHandler(url string) (string, error) {
 
 // sanitize the url by removing everything superfluous
 func sanitize(title string) string {
-	title = strings.Trim(title, "")
+	title = strings.TrimSpace(title)
 	return title
 }
