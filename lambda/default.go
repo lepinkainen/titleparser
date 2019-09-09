@@ -70,11 +70,11 @@ func DefaultHandler(url string) (string, error) {
 
 // sanitize the url by removing everything superfluous
 func sanitize(title string) string {
-	// remove leading and trailing whitespace
-	title = strings.TrimSpace(title)
 	// remove newlines
 	title = strings.ReplaceAll(title, "\n", "")
 	title = strings.ReplaceAll(title, "\r", "")
+	// remove leading and trailing whitespace
+	title = strings.TrimSpace(title)
 
 	// max size 200 characters. It's a title, not a goddamn novel
 	end := len(title)
