@@ -1,6 +1,7 @@
 package lambda
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -79,8 +80,8 @@ func sanitize(title string) string {
 	end := len(title)
 	if end > TitleMax {
 		end = TitleMax
+		title = fmt.Sprintf("%s...", title[:end])
 	}
-	title = title[:end]
 
 	return title
 }

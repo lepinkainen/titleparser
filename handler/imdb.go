@@ -58,11 +58,16 @@ func OMDB(url string) (string, error) {
 		return "", errors.Wrap(err, "HTTP error")
 	}
 
-	bytes, err := ioutil.ReadAll(res.Body)
+	// error ignored on purpose
+	bytes, _ := ioutil.ReadAll(res.Body)
 
+	// unmarshal JSON
 	var reply omdbReply
 
-	json.Unmarshal(bytes, &reply)
+	err = json.Unmarshal(bytes, &reply)
+	if err != nil {
+		return "", err
+	}
 
 	// Get possible scores from the Rating section
 	var rtScore = "N/A"
