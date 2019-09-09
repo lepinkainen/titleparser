@@ -14,6 +14,9 @@ var (
 	ErrTitleNotFound = errors.New("No title found from URL")
 	// ErrNotHTML is returned when the source url is not of type text/html
 	ErrNotHTML = errors.New("Source url is not HTML")
+
+	// TitleMax is the maximum length for a title
+	TitleMax = 200
 )
 
 // DefaultHandler is the fallback for sites that don't have a special handler
@@ -66,6 +69,18 @@ func DefaultHandler(url string) (string, error) {
 
 // sanitize the url by removing everything superfluous
 func sanitize(title string) string {
+	// remove leading and trailing whitespace
 	title = strings.TrimSpace(title)
+	// remove newlines
+	title = strings.ReplaceAll(title, "\n", "")
+	title = strings.ReplaceAll(title, "\r", "")
+
+	// max size 200 characters. It's a title, not a goddamn novel
+	end := len(title)
+	if end > TitleMax {
+		end = TitleMax
+	}
+	title = title[:end]
+
 	return title
 }

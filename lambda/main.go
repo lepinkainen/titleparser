@@ -13,6 +13,7 @@ var (
 	handlerFunctions = make(map[string]func(string) (string, error))
 )
 
+// TitleQuery received via HTTP(s)
 type TitleQuery struct {
 	Added   int64  `json:"timestamp"`
 	User    string `json:"user"`
