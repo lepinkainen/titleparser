@@ -11,5 +11,8 @@ test:
 	go vet ./...
 	go test -race -v ./...
 
-publish: test build
+lint:
+	-golangci-lint run ./...
+
+publish: test lint build
 	aws lambda update-function-code --publish --function-name $(FUNCNAME) --zip-file fileb://$(BUILDDIR)/$(FUNCNAME).zip
