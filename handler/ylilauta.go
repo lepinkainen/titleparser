@@ -3,12 +3,18 @@ package handler
 import (
 	"net/http"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/lepinkainen/titleparser/lambda"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
+)
+
+var (
+	// KeyRegex attempts to find the cookie key we need to authenticate ourselves as a human :D
+	KeyRegex = regexp.MustCompile(`key=(.*?)\;`)
 )
 
 // handleYlilauta fetches Ylilauta titles by doing the cookie challenge correctly
@@ -44,19 +50,28 @@ func handleYlilauta(url string, authKey string) (string, error) {
 		return "", errors.Wrap(err, "Could not load HTML")
 	}
 
-	// Get the title
+	// Authkey not set, fetch the challenge token
+	if authKey == "" {
+		log.Debugln("Fetching cookie for challenge")
+		// Title wasn't found, do the cookie challenge
+		cookiechallenge := doc.Find("script").Text()
+		keymatches := KeyRegex.FindStringSubmatch(cookiechallenge)
+		if len(keymatches) != 0 {
+			log.Debugf("Challenge cookie found: %s", keymatches[1])
+			return handleYlilauta(url, keymatches[1])
+		}
+	}
+
+	// We're in, get the title and get out
 	s := doc.Find("title")
 	if s != nil && s.Size() > 0 {
 		title := s.First().Text()
+		title = strings.TrimSuffix(title, " | Ylilauta")
+		log.Debugf("Title found: %s", title)
 		return title, nil
 	}
 
-	// Title wasn't found do the cookie challenge
-	var keyRegex = regexp.MustCompile(`key=(.*?)\;`)
-	cookiechallenge := doc.Find("script").Text()
-	key := keyRegex.FindStringSubmatch(cookiechallenge)[1]
-
-	return handleYlilauta(url, key)
+	return "", errors.New("No title found from URL")
 }
 
 // Ylilauta handler, handles the cookie challenge
