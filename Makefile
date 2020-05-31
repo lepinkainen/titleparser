@@ -1,6 +1,12 @@
 FUNCNAME=titleparser
 BUILDDIR=build
 
+# Include .env and export them as environment variables
+-include .env
+# Only export the variables we defined in the file
+export $(shell sed 's/=.*//' .env)
+
+
 .PHONY: build
 
 build: test
@@ -9,7 +15,7 @@ build: test
 
 test:
 	go vet ./...
-	go test -race -v ./...
+	go test -race -cover -v ./...
 
 lint:
 	-golangci-lint run ./...

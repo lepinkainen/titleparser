@@ -1,3 +1,6 @@
 test.sh
 vendor/
 build/
+
+# Api keys and stuff for unit tests and development
+.env
