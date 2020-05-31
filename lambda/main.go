@@ -56,10 +56,13 @@ func HandleRequest(ctx context.Context, query TitleQuery) (TitleQuery, error) {
 
 		// no error and match, run function to get actual title and return
 		if err == nil && match {
+			log.Infof("Handler match found for %s\n", query.URL)
 			title, err := handler(query.URL)
 			return CacheAndReturn(query, title, err)
 		}
 	}
+
+	log.Infof("No handler found for %s, falling back to default", query.URL)
 
 	// custom parsers didn't match, use the default parser
 	title, err := DefaultHandler(query.URL)
