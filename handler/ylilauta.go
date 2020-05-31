@@ -13,8 +13,8 @@ import (
 )
 
 var (
-	// KeyRegex attempts to find the cookie key we need to authenticate ourselves as a human :D
-	KeyRegex = regexp.MustCompile(`key=(.*?)\;`)
+	// keyRegex attempts to find the cookie key we need to authenticate ourselves as a human :D
+	keyRegex = regexp.MustCompile(`key=(.*?)\;`)
 )
 
 // handleYlilauta fetches Ylilauta titles by doing the cookie challenge correctly
@@ -55,7 +55,7 @@ func handleYlilauta(url string, authKey string) (string, error) {
 		log.Debugln("Fetching cookie for challenge")
 		// Title wasn't found, do the cookie challenge
 		cookiechallenge := doc.Find("script").Text()
-		keymatches := KeyRegex.FindStringSubmatch(cookiechallenge)
+		keymatches := keyRegex.FindStringSubmatch(cookiechallenge)
 		if len(keymatches) != 0 {
 			log.Debugf("Challenge cookie found: %s", keymatches[1])
 			return handleYlilauta(url, keymatches[1])
