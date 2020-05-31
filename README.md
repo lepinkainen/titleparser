@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/lepinkainen/titleparser.svg?branch=master)](https://travis-ci.org/lepinkainen/titleparser)
+[![CircleCI](https://circleci.com/gh/lepinkainen/titleparser.svg?style=svg)](https://circleci.com/gh/lepinkainen/titleparser)
+
 
 # titleparser
 
