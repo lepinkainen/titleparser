@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.1
-	github.com/aws/aws-lambda-go v1.13.1
+	github.com/aws/aws-lambda-go v1.17.0
 	github.com/aws/aws-sdk-go v1.31.8
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/pkg/errors v0.9.1
