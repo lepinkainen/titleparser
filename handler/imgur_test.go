@@ -15,6 +15,7 @@ func TestImgur(t *testing.T) {
 		{"gallery test", args{url: "https://imgur.com/gallery/md2Sxjm"}, "Chill in the face of aggression. [tags: america, police brutality, protest, current events, take that]", false},
 		{"gallery test 2", args{url: "https://imgur.com/gallery/QXR4OL2"}, "Another Soulsborne dump? Why not! [44 images] [tags: Dark Souls, bloodborne, darksouls, dark souls 3, dark souls 2 is actually ok]", false},
 		{"gallery test 3", args{url: "https://imgur.com/gallery/YCNzrKx"}, "As pertinent and poignant as ever. [tags: reaction, current events]", false},
+		{"album test", args{url: "https://imgur.com/a/X2PcObK"}, "Assembly 1998 prizegivign. [2 images]", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

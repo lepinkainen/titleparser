@@ -17,6 +17,8 @@ import (
 var (
 	// imgur gallery
 	galleryRegex = regexp.MustCompile(`.*?imgur.com/gallery/(.*)`)
+	// imgur album
+	albumRegex = regexp.MustCompile(`.*?imgur.com/a/(.*)`)
 )
 
 // ImgurResponse is the imgur generic API response for all gallery queries
@@ -120,8 +122,9 @@ type ImgurResponse struct {
 	Status  int  `json:"status"`
 }
 
-func imgurGallery(url, id string) (string, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.imgur.com/3/gallery/%s", id), nil)
+// Use the Imgur API to get a matching response struct for given category/resource
+func getAPIResponse(category, id string) (ImgurResponse, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.imgur.com/3/%s/%s", category, id), nil)
 	if err != nil {
 		log.Fatal("Error reading request. ", err)
 	}
@@ -143,6 +146,36 @@ func imgurGallery(url, id string) (string, error) {
 	var apiResponse ImgurResponse
 	dec := json.NewDecoder(res.Body)
 	err = dec.Decode(&apiResponse)
+
+	return apiResponse, err
+}
+
+// https://api.imgur.com/models/gallery_album
+func imgurGallery(url, id string) (string, error) {
+	apiResponse, err := getAPIResponse("gallery", id)
+	if err != nil {
+		return "", err
+	}
+
+	title := apiResponse.Data.Title
+	if apiResponse.Data.ImagesCount > 1 {
+		title = fmt.Sprintf("%s [%d images]", title, apiResponse.Data.ImagesCount)
+	}
+	if len(apiResponse.Data.Tags) > 0 {
+		tags := []string{}
+		for _, tag := range apiResponse.Data.Tags {
+			tags = append(tags, tag.DisplayName)
+		}
+		title = fmt.Sprintf("%s [tags: %s]", title, strings.Join(tags, ", "))
+	}
+
+	return title, nil
+}
+
+// Just a normal album, not in the public gallery(?)
+// https://api.imgur.com/models/album
+func imgurAlbum(url, id string) (string, error) {
+	apiResponse, err := getAPIResponse("album", id)
 	if err != nil {
 		return "", err
 	}
@@ -169,6 +202,12 @@ func Imgur(url string) (string, error) {
 		return imgurGallery(url, match[1])
 	}
 
+	match = albumRegex.FindStringSubmatch(url)
+	if len(match) > 0 {
+		return imgurAlbum(url, match[1])
+	}
+
+	// Nothing to be done
 	return "", nil
 }
 
