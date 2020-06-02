@@ -3,6 +3,7 @@ package lambda
 import (
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -18,6 +19,9 @@ var (
 
 	// TitleMax is the maximum length for a title
 	TitleMax = 200
+
+	// RemoveWhitespaceRegex marks all tokens with more than one whitespace
+	RemoveWhitespaceRegex = regexp.MustCompile(`[\s]{2,}`)
 )
 
 // DefaultHandler is the fallback for sites that don't have a special handler
@@ -70,11 +74,14 @@ func DefaultHandler(url string) (string, error) {
 
 // sanitize the url by removing everything superfluous
 func sanitize(title string) string {
+	// remove extra whitespace in the middle of the title
+	// some crappy CMSes leave it all over the place
+	title = RemoveWhitespaceRegex.ReplaceAllLiteralString(title, " ")
+	// remove leading and trailing whitespace
+	title = strings.TrimSpace(title)
 	// remove newlines
 	title = strings.ReplaceAll(title, "\n", "")
 	title = strings.ReplaceAll(title, "\r", "")
-	// remove leading and trailing whitespace
-	title = strings.TrimSpace(title)
 
 	// max size 200 characters. It's a title, not a goddamn novel
 	end := len(title)

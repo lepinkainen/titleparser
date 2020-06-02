@@ -20,6 +20,8 @@ func TestDefaultHandler(t *testing.T) {
 		{"No title", args{url: "http://addiktit.net"}, "", true},
 		{"URL looks like jpg but isn't", args{url: "http://kuvaton.com/browse/57101/fatcop.jpg"}, "fatcop.jpg", false},
 		{"Image", args{url: "https://i.imgur.com/r13Q6Yp.jpg"}, "", true},
+		//TODO: bell-labs added an og:title, which isn't broken find another example
+		//{"Whitespace in middle of title", args{url: "https://www.bell-labs.com/unix50/"}, "Unix 50", false},
 		// TODO: Gog.com localises based on IP, so this fails in multiple ways depending on where the build machine is...
 		//{"Gog.com Diablo", args{url: "https://www.gog.com/game/diablo"}, "Diablo + Hellfire on GOG.com", false},
 		// TODO: Long title (over 200 characters)
