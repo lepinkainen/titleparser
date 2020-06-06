@@ -6,9 +6,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"html"
-	"log"
 	"net/http"
 	"os"
+
+	log "github.com/sirupsen/logrus"
 
 	_ "github.com/lepinkainen/titleparser/handler"
 	"github.com/lepinkainen/titleparser/lambda"
@@ -42,8 +43,12 @@ func main() {
 
 	http.HandleFunc("/title", func(w http.ResponseWriter, r *http.Request) {
 
-		query := lambda.TitleQuery{
-			URL: "https://imgur.com/gallery/NsM4oor",
+		decoder := json.NewDecoder(r.Body)
+		var query lambda.TitleQuery
+		err := decoder.Decode(&query)
+		if err != nil {
+			log.Errorln("OMGLOL")
+			return
 		}
 
 		res, err := lambda.HandleRequest(context.Background(), query)
