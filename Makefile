@@ -9,6 +9,9 @@ export $(shell sed 's/=.*//' .env)
 
 .PHONY: build
 
+build_local: test
+	go build -o $(FUNCNAME)
+
 build: test
 	env GOOS=linux GOARCH=amd64 go build -o $(BUILDDIR)/$(FUNCNAME)
 	cd $(BUILDDIR) && zip $(FUNCNAME).zip $(FUNCNAME)

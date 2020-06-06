@@ -1,4 +1,6 @@
 test.sh
+titleparser
+
 vendor/
 build/
 

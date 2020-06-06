@@ -197,6 +197,7 @@ func imgurAlbum(url, id string) (string, error) {
 
 // Imgur titles are always useless, just don't return anything
 func Imgur(url string) (string, error) {
+
 	match := galleryRegex.FindStringSubmatch(url)
 	if len(match) > 0 {
 		return imgurGallery(url, match[1])
@@ -213,5 +214,8 @@ func Imgur(url string) (string, error) {
 
 // Register the handler function with corresponding regex
 func init() {
-	lambda.RegisterHandler(".*?imgur.com.*", Imgur)
+	if os.Getenv("IMGUR_KEY") != "" {
+		lambda.RegisterHandler(".*?imgur.com.*", Imgur)
+	}
+	_ = fmt.Errorf("IMGUR_KEY not set, handler inactive")
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"regexp"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 	//"github.com/lepinkainen/titleparser/handler"
@@ -41,9 +42,14 @@ func HandleRequest(ctx context.Context, query TitleQuery) (TitleQuery, error) {
 
 	log.Infof("Handling %v", query)
 
-	// if query is cached, return from cache instead of fetching
-	if title, err := CheckCache(query); err == nil {
-		return CacheAndReturn(query, title, nil)
+	// If we are running locally, don't use dynamodb as a cache
+	// TODO: Possibly add an in-memory DB or sqlite for local mode caching?
+	var runmode = os.Getenv("RUNMODE")
+	if runmode != "local" {
+		// if query is cached, return from cache instead of fetching
+		if title, err := CheckCache(query); err == nil {
+			return CacheAndReturn(query, title, nil)
+		}
 	}
 
 	for pattern, handler := range handlerFunctions {
@@ -58,7 +64,16 @@ func HandleRequest(ctx context.Context, query TitleQuery) (TitleQuery, error) {
 		if err == nil && match {
 			log.Infof("Handler match found for %s\n", query.URL)
 			title, err := handler(query.URL)
-			return CacheAndReturn(query, title, err)
+			if runmode != "local" {
+				return CacheAndReturn(query, title, err)
+			}
+			log.Infoln("Local mode, not caching result")
+
+			query.Title = title
+			query.Added = time.Now().Unix()
+			query.TTL = time.Now().Unix() + 86400 // 24 hours
+
+			return query, err
 		}
 	}
 
