@@ -16,9 +16,9 @@ import (
 
 var (
 	// imgur gallery
-	galleryRegex = regexp.MustCompile(`.*?imgur.com/gallery/(.*)`)
+	galleryRegex = regexp.MustCompile(`.*?imgur\.com/gallery/(.*)`)
 	// imgur album
-	albumRegex = regexp.MustCompile(`.*?imgur.com/a/(.*)`)
+	albumRegex = regexp.MustCompile(`.*?imgur\.com/a/(.*)`)
 )
 
 // ImgurResponse is the imgur generic API response for all gallery queries
