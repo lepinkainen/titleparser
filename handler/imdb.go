@@ -18,7 +18,7 @@ var (
 	// url pattern for OMDB searches
 	omdbURL = "http://www.omdbapi.com/?i=%s&apikey=%s"
 	// figure out imdb id from url
-	imdbRe = regexp.MustCompile(`https://www.imdb.com/title/(tt.*?)/.*`)
+	imdbRegex = regexp.MustCompile(`https://www\.imdb\.com/title/(tt.*?)/.*`)
 )
 
 type omdbReply struct {
@@ -42,7 +42,7 @@ func OMDB(url string) (string, error) {
 		return "", errors.New("No API key set for OMDB")
 	}
 
-	id := imdbRe.FindStringSubmatch(url)
+	id := imdbRegex.FindStringSubmatch(url)
 	if len(id) < 2 {
 		return "", errors.New("No title ID found in URL")
 	}
