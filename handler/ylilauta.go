@@ -25,9 +25,9 @@ func handleYlilauta(url string, authKey string) (string, error) {
 	}
 
 	// Set headers
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:49.0) Gecko/20100101 Firefox/49.0")
-	req.Header.Set("Accept-Language", "*")
-	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("Accept-Language", AcceptLanguage)
+	req.Header.Set("Accept", Accept)
 
 	// Create and Add cookie to request
 	cookie := http.Cookie{Name: "key", Value: authKey}
