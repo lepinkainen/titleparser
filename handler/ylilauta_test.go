@@ -14,6 +14,8 @@ func TestYlilauta(t *testing.T) {
 	}{
 		{"Archive URL test", args{url: "https://ylilauta.org/arkisto/122796229"}, "Tässä langassa pukeudutaan kauppakasseihin - Arkisto", false},
 		{"Active URL test", args{url: "https://ylilauta.org/sekalainen/125520689"}, "Vassari yritti ryöstää rekan mutta jäikin rekan alle:D - Suvaitsevainen", false},
+		{"Non archive URL test", args{url: "https://ylilauta.org/sota/82011066"}, "Onko Suomella ydinase? Ruotsin ydinaseohjelma jatkui sala... - Sota ja armeija", false},
+		{"Wrong URL", args{url: "http://mantta.fi"}, "", true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

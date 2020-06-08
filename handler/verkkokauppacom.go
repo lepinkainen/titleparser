@@ -34,7 +34,6 @@ func Verkkokauppa(url string) (string, error) {
 	title := selection.Contents().Text()
 
 	return title, nil
-
 }
 
 func init() {

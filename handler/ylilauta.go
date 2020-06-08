@@ -60,6 +60,7 @@ func handleYlilauta(url string, authKey string) (string, error) {
 			log.Debugf("Challenge cookie found: %s", keymatches[1])
 			return handleYlilauta(url, keymatches[1])
 		}
+		return "", errors.New("Could not complete cookie challenge")
 	}
 
 	// We're in, get the title and get out
