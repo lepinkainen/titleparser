@@ -19,6 +19,8 @@ var (
 	galleryRegex = regexp.MustCompile(`.*?imgur\.com/gallery/(.*)`)
 	// imgur album
 	albumRegex = regexp.MustCompile(`.*?imgur\.com/a/(.*)`)
+	// just plain imgur image
+	imgRegex = regexp.MustCompile(`.?imgur\.com/([^\.]+)`)
 )
 
 // ImgurResponse is the imgur generic API response for all gallery queries
@@ -195,6 +197,26 @@ func imgurAlbum(url, id string) (string, error) {
 	return title, nil
 }
 
+// Image page link
+func imgurImage(url, id string) (string, error) {
+	apiResponse, err := getAPIResponse("image", id)
+	if err != nil {
+		return "", err
+	}
+
+	title := apiResponse.Data.Title
+
+	if len(apiResponse.Data.Tags) > 0 {
+		tags := []string{}
+		for _, tag := range apiResponse.Data.Tags {
+			tags = append(tags, tag.DisplayName)
+		}
+		title = fmt.Sprintf("%s [tags: %s]", title, strings.Join(tags, ", "))
+	}
+
+	return title, nil
+}
+
 // Imgur titles are always useless, just don't return anything
 func Imgur(url string) (string, error) {
 
@@ -207,6 +229,13 @@ func Imgur(url string) (string, error) {
 	if len(match) > 0 {
 		return imgurAlbum(url, match[1])
 	}
+
+	match = imgRegex.FindStringSubmatch(url)
+	if len(match) > 0 {
+		return imgurImage(url, match[1])
+	}
+
+	// Direct image links don't seem to have title information
 
 	// Nothing to be done
 	return "", nil
