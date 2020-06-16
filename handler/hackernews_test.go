@@ -12,7 +12,7 @@ func TestHackerNews(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{"Story 1", args{url: "https://news.ycombinator.com/item?id=23439437"}, "A List of Hacker News's Undocumented Features and Behaviors (2018) by billme [670 points]", false},
+		{"Story 1", args{url: "https://news.ycombinator.com/item?id=23439437"}, "A List of Hacker News's Undocumented Features and Behaviors (2018) by billme [673 points]", false},
 		{"Story 2", args{url: "https://news.ycombinator.com/item?id=23435805"}, "USB-C is still a mess by vo2maxer [216 points]", false},
 		{"Wrong URL", args{url: "http://mantta.fi"}, "", false},
 	}
