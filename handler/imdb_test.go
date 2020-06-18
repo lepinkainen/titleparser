@@ -15,7 +15,7 @@ func TestOMDB(t *testing.T) {
 	}{
 		{"The Matrix - movie",
 			args{url: "https://www.imdb.com/title/tt0133093/"},
-			"The Matrix (1999) [IMDb 8.7/10] [RT 87%] [Meta 73/100]",
+			"The Matrix (1999) [IMDb 8.7/10] [RT 88%] [Meta 73/100]",
 			false},
 		{"LOTR - movie - ref",
 			args{url: "https://www.imdb.com/title/tt0120737/?ref_=fn_al_tt_1"},
