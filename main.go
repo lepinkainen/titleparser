@@ -19,6 +19,9 @@ import (
 
 func main() {
 
+	// TODO: API-key for security in local mode
+	// TODO: Make port configurable
+
 	var runmode = os.Getenv("RUNMODE")
 	if runmode != "local" {
 		awslambda.Start(lambda.HandleRequest)
