@@ -55,9 +55,10 @@ func HandleRequest(ctx context.Context, query TitleQuery) (TitleQuery, error) {
 	for pattern, handler := range handlerFunctions {
 		match, err := regexp.MatchString(pattern, query.URL)
 
-		// error in matching, log and continue
+		// error in matching, log and continue to next pattern
 		if err != nil {
 			log.Errorf("Error matching with pattern %s: %v", pattern, err)
+			continue
 		}
 
 		// no error and match, run function to get actual title and return
