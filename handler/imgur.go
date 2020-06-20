@@ -197,7 +197,23 @@ func imgurAlbum(url, id string) (string, error) {
 	return title, nil
 }
 
+// Subreddit images have a special gallery for each "section"
+// Returns: title [/r/subreddit]
+func subredditImage(url, section, id string) (string, error) {
+	apiResponse, err := getAPIResponse(fmt.Sprintf("gallery/r/%s", section), id)
+	if err != nil {
+		return "", err
+	}
+
+	title := apiResponse.Data.Title
+
+	title = fmt.Sprintf("%s [/r/%s]", title, section)
+
+	return title, nil
+}
+
 // Image page link
+// Returns: title [tags: 1, 2, 3]
 func imgurImage(url, id string) (string, error) {
 	apiResponse, err := getAPIResponse("image", id)
 	if err != nil {
@@ -205,6 +221,11 @@ func imgurImage(url, id string) (string, error) {
 	}
 
 	title := apiResponse.Data.Title
+
+	// No title, but section exists -> subreddit gallery image
+	if title == "" && apiResponse.Data.Section != "" {
+		return subredditImage(url, apiResponse.Data.Section, id)
+	}
 
 	if len(apiResponse.Data.Tags) > 0 {
 		tags := []string{}

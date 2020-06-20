@@ -18,6 +18,10 @@ func TestImgur(t *testing.T) {
 		{"album test", args{url: "https://imgur.com/a/X2PcObK"}, "Assembly 1998 prizegivign. [2 images]", false},
 		{"album test/no title", args{url: "https://imgur.com/a/MZY7mkE"}, "", false},
 		{"image test", args{url: "https://imgur.com/BGMckfX"}, "Ella Love", false},
+		{"subreddit image test", args{url: "https://i.imgur.com/k3w8kHG.jpg"}, "Arkiliikenne [/r/Suomi]", false},
+		{"subreddit image test direct 1", args{url: "https://imgur.com/k3w8kHG"}, "Arkiliikenne [/r/Suomi]", false},
+		{"subreddit image test 2", args{url: "https://i.imgur.com/dJJbwhM.jpg"}, "Stay safe out there. [/r/MTB]", false},
+		{"subreddit image test direct 2", args{url: "https://imgur.com/dJJbwhM"}, "Stay safe out there. [/r/MTB]", false},
 		{"Wrong URL", args{url: "http://mantta.fi"}, "", false},
 	}
 	for _, tt := range tests {
