@@ -19,7 +19,8 @@ var (
 	galleryRegex = regexp.MustCompile(`.*?imgur\.com/gallery/(.*)`)
 	// imgur album
 	albumRegex = regexp.MustCompile(`.*?imgur\.com/a/(.*)`)
-	// just plain imgur image
+	// just plain imgur image -> imgur.com/asdf.<any extension> will match
+	// Should handle jpg, gifv etc
 	imgRegex = regexp.MustCompile(`.?imgur\.com/([^\.]+)`)
 )
 

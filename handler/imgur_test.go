@@ -22,6 +22,7 @@ func TestImgur(t *testing.T) {
 		{"subreddit image test direct 1", args{url: "https://imgur.com/k3w8kHG"}, "Arkiliikenne [/r/Suomi]", false},
 		{"subreddit image test 2", args{url: "https://i.imgur.com/dJJbwhM.jpg"}, "Stay safe out there. [/r/MTB]", false},
 		{"subreddit image test direct 2", args{url: "https://imgur.com/dJJbwhM"}, "Stay safe out there. [/r/MTB]", false},
+		{"subreddit gifv test", args{url: "https://i.imgur.com/OiocRjL.gifv"}, "The correct usage of a phone [/r/gifs]", false},
 		{"Wrong URL", args{url: "http://mantta.fi"}, "", false},
 	}
 	for _, tt := range tests {
