@@ -64,7 +64,7 @@ func main() {
 			_ = fmt.Errorf("Error marshaling response JSON: %#v", err)
 		}
 
-		fmt.Fprintf(w, string(q))
+		fmt.Fprint(w, string(q))
 	})
 
 	log.Fatal(http.ListenAndServe("127.0.0.1:8081", nil))
