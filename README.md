@@ -10,6 +10,8 @@ Custom parsers for:
 - Ylilauta
 - Imgur
 - IMDB (via OMDB)
+- Twitter
+- Hackernews (via API)
 
 ## TODO
 
