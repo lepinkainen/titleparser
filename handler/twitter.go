@@ -77,6 +77,10 @@ func Twitter(url string) (string, error) {
 
 	// TODO: Handle tweet age
 	createTime, err := tweet.CreatedAtTime()
+	if err != nil {
+		log.Errorf("Could not get tweet creation time: %s", err)
+		return "", err
+	}
 
 	// TODO: 2 weeks ago -> 2w would require a custom magnitudes -struct
 	ago := humanize.CustomRelTime(createTime, time.Now(), "", "", shortMagnitudes)
