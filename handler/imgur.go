@@ -213,6 +213,15 @@ func subredditImage(url, section, id string) (string, error) {
 
 	title := apiResponse.Data.Title
 
+	// Most likely the image will not have tags, but this doesn't hurt ¯\_(ツ)_/¯
+	if len(apiResponse.Data.Tags) > 0 {
+		tags := []string{}
+		for _, tag := range apiResponse.Data.Tags {
+			tags = append(tags, tag.DisplayName)
+		}
+		title = fmt.Sprintf("%s [tags: %s]", title, strings.Join(tags, ", "))
+	}
+
 	title = fmt.Sprintf("%s [/r/%s]", title, section)
 
 	return title, nil
@@ -227,6 +236,14 @@ func tagImage(url, section, id string) (string, error) {
 	}
 
 	title := apiResponse.Data.Title
+
+	if len(apiResponse.Data.Tags) > 0 {
+		tags := []string{}
+		for _, tag := range apiResponse.Data.Tags {
+			tags = append(tags, tag.DisplayName)
+		}
+		title = fmt.Sprintf("%s [tags: %s]", title, strings.Join(tags, ", "))
+	}
 
 	//title = fmt.Sprintf("%s [/t/%s]", title, section)
 
