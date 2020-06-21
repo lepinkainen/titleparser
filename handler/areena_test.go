@@ -3,6 +3,8 @@ package handler
 import "testing"
 
 func TestYleAreena(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		url string
 	}
@@ -15,7 +17,9 @@ func TestYleAreena(t *testing.T) {
 		{"Custom handler", args{url: "https://areena.yle.fi/1-4192173"}, "Areena custom handler", false},
 	}
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := YleAreena(tt.args.url)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("YleAreena() error = %v, wantErr %v", err, tt.wantErr)

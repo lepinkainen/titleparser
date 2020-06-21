@@ -11,6 +11,8 @@ func TestYlilauta(t *testing.T) {
 		t.Skip("Skipping Ylilauta tests when running in CI")
 	}
 
+	t.Parallel()
+
 	type args struct {
 		url string
 	}
@@ -27,7 +29,9 @@ func TestYlilauta(t *testing.T) {
 		{"Wrong URL", args{url: "http://mantta.fi"}, "", true},
 	}
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := Ylilauta(tt.args.url)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Ylilauta() error = %v, wantErr %v", err, tt.wantErr)

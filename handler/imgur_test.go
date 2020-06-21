@@ -3,6 +3,8 @@ package handler
 import "testing"
 
 func TestImgur(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		url string
 	}
@@ -28,7 +30,9 @@ func TestImgur(t *testing.T) {
 		{"Wrong URL", args{url: "http://mantta.fi"}, "", false},
 	}
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := Imgur(tt.args.url)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Imgur() error = %v, wantErr %v", err, tt.wantErr)

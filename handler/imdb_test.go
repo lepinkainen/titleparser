@@ -4,6 +4,8 @@ import "testing"
 
 // TODO: Make test use golden files instead of online testing
 func TestOMDB(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		url string
 	}
@@ -32,7 +34,9 @@ func TestOMDB(t *testing.T) {
 		{"Wrong URL", args{url: "http://mantta.fi"}, "", true},
 	}
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := OMDB(tt.args.url)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("OMDB() error = %v, wantErr %v", err, tt.wantErr)
