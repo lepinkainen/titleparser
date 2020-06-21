@@ -17,11 +17,16 @@ import (
 var (
 	// imgur gallery
 	galleryRegex = regexp.MustCompile(`.*?imgur\.com/gallery/(.*)`)
+
 	// imgur album
 	albumRegex = regexp.MustCompile(`.*?imgur\.com/a/(.*)`)
+
+	// tag galleries https://imgur.com/t/funny/MWvY6dD
+	tagRegex = regexp.MustCompile(`.*?imgur\.com/t/(.*?)/(.*)`)
+
 	// just plain imgur image -> imgur.com/asdf.<any extension> will match
 	// Should handle jpg, gifv etc
-	imgRegex = regexp.MustCompile(`.?imgur\.com/([^\.]+)`)
+	imageRegex = regexp.MustCompile(`.?imgur\.com/([^\.]+)`)
 )
 
 // ImgurResponse is the imgur generic API response for all gallery queries
@@ -213,6 +218,21 @@ func subredditImage(url, section, id string) (string, error) {
 	return title, nil
 }
 
+// Subreddit images have a special gallery for each "section"
+// Returns: title [/r/subreddit]
+func tagImage(url, section, id string) (string, error) {
+	apiResponse, err := getAPIResponse(fmt.Sprintf("gallery/t/%s", section), id)
+	if err != nil {
+		return "", err
+	}
+
+	title := apiResponse.Data.Title
+
+	//title = fmt.Sprintf("%s [/t/%s]", title, section)
+
+	return title, nil
+}
+
 // Image page link
 // Returns: title [tags: 1, 2, 3]
 func imgurImage(url, id string) (string, error) {
@@ -252,7 +272,12 @@ func Imgur(url string) (string, error) {
 		return imgurAlbum(url, match[1])
 	}
 
-	match = imgRegex.FindStringSubmatch(url)
+	match = tagRegex.FindStringSubmatch(url)
+	if len(match) > 0 {
+		return tagImage(url, match[1], match[2])
+	}
+
+	match = imageRegex.FindStringSubmatch(url)
 	if len(match) > 0 {
 		return imgurImage(url, match[1])
 	}
