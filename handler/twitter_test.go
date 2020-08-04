@@ -14,7 +14,7 @@ func TestTwitter(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{"Kohli 1 - emoji,link", args{url: "https://twitter.com/RahulKohli13/status/1263946250077929473"}, "Rahul Kohli (✔@RahulKohli13) 1m: Becoming an actor can be incredibly challenging and extremely daunting but if you really want get off to a great start, stop using the fucking hashtag #ActorsLife on Instagram with your stupid fucking pictures of you posing at Starbucks, “prepping for your audition 💅🏽”. https://t.co/yeTkJkBx2Z [♻ 13 ♥ 531]", false},
+		{"Kohli 1 - emoji,link", args{url: "https://twitter.com/RahulKohli13/status/1263946250077929473"}, "Rahul Kohli (✔@RahulKohli13) 2m: Becoming an actor can be incredibly challenging and extremely daunting but if you really want get off to a great start, stop using the fucking hashtag #ActorsLife on Instagram with your stupid fucking pictures of you posing at Starbucks, “prepping for your audition 💅🏽”. https://t.co/yeTkJkBx2Z [♻ 13 ♥ 531]", false},
 	}
 	for _, tt := range tests {
 		tt := tt
