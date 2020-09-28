@@ -26,7 +26,7 @@ func TestTwitter(t *testing.T) {
 				t.Errorf("Twitter() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !strings.starsWith(got, tt.want) {
+			if !strings.startsWith(got, tt.want) {
 				t.Errorf("Twitter() = %v, want %v", got, tt.want)
 			}
 		})
