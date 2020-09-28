@@ -1,7 +1,9 @@
 package handler
 
-import "testing"
-import "strings"
+import (
+	"strings"
+	"testing"
+)
 
 func TestTwitter(t *testing.T) {
 	t.Parallel()
@@ -26,7 +28,7 @@ func TestTwitter(t *testing.T) {
 				t.Errorf("Twitter() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !strings.startsWith(got, tt.want) {
+			if !strings.HasPrefix(got, tt.want) {
 				t.Errorf("Twitter() = %v, want %v", got, tt.want)
 			}
 		})
