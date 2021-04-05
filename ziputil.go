@@ -8,6 +8,8 @@ import (
 	"os"
 )
 
+// From: https://golangcode.com/create-zip-files-in-go/
+
 func addFileToZip(zipWriter *zip.Writer, filename string) error {
 
 	fileToZip, err := os.Open(filename)
