@@ -2,9 +2,9 @@ FUNCNAME=titleparser
 BUILDDIR=build
 
 # Include .env and export them as environment variables
--include .env
+- include .env
 # Only export the variables we defined in the file
-export $(shell sed 's/=.*//' .env)
+- export $(shell sed 's/=.*//' .env)
 
 
 .PHONY: build
