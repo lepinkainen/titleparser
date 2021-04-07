@@ -1,0 +1,17 @@
+name: test
+on: [push, pull_request]
+
+jobs:
+  test-nix:
+    strategy:
+      matrix:
+        runs-on: [ ubuntu-latest, macos-latest ]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: Run Tests in Bash
+        run: make test
+        shell: bash
+        env:
+          TEST_SHELL: bash
