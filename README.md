@@ -1,6 +1,6 @@
 # titleparser
 
-[![CircleCI](https://circleci.com/gh/lepinkainen/titleparser.svg?style=svg)](https://circleci.com/gh/lepinkainen/titleparser)
+![test workflow](https://github.com/lepinkainen/titleparser/actions/workflows/workflow.yaml/badge.svg)
 
 A golang implementation of an URL title parser running in AWS Lambda
 
