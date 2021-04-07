@@ -21,3 +21,9 @@ jobs:
           TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
       - name: Build project
         run: make build
+        env:
+          TEST_SHELL: bash
+          IMGUR_KEY: ${{ secrets.IMGUR_KEY }}
+          OMDB_KEY: ${{ secrets.OMDB_KEY }}
+          TWITTER_CLIENTID: ${{ secrets.TWITTER_CLIENTID }}
+          TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
