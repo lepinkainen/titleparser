@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
-      - name: Run Tests in Bash
+      - name: Run tests
         run: make test
         shell: bash
         env:
@@ -19,3 +19,5 @@ jobs:
           OMDB_KEY: ${{ secrets.OMDB_KEY }}
           TWITTER_CLIENTID: ${{ secrets.TWITTER_CLIENTID }}
           TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
+      - name: Build project
+        run: make build
