@@ -5,7 +5,7 @@ jobs:
   test-nix:
     strategy:
       matrix:
-        runs-on: [ ubuntu-latest, macos-latest ]
+        runs-on: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v2
@@ -15,3 +15,7 @@ jobs:
         shell: bash
         env:
           TEST_SHELL: bash
+          IMGUR_KEY: ${{ secrets.IMGUR_KEY }}
+          OMDB_KEY: ${{ secrets.OMDB_KEY }}
+          TWITTER_CLIENTID: ${{ secrets.TWITTER_CLIENTID }}
+          TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
