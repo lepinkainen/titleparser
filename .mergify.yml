@@ -2,7 +2,8 @@ pull_request_rules:
   - name: automatic Dependabot merge when CI passes
     conditions:
       - author~=^dependabot(|-preview)\[bot\]$
-      - "status-success=ci/circleci: build"
+      - check-success=Run tests
+      - check-success=Build project
       - base=master
     actions:
       merge:
