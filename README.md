@@ -7,7 +7,6 @@ A golang implementation of an URL title parser running in AWS Lambda
 - Fetches both the `<title>` element and Opengraph title (`<meta property="og:title" content="Title" />`), preference on the latter as it is usually less spammy.
 
 Custom parsers for:
-- Ylilauta
 - Imgur
 - IMDB (via OMDB)
 - Twitter
