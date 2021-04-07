@@ -9,10 +9,18 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v2
+      # https://github.com/actions/setup-go
       - uses: actions/setup-go@v2
+      # Cache go modules to speed up runs
+      # https://github.com/actions/cache/blob/main/examples.md#go---modules
+      - uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
       - name: Run tests
         run: make test
-        shell: bash
         env:
           TEST_SHELL: bash
           IMGUR_KEY: ${{ secrets.IMGUR_KEY }}
