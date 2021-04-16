@@ -10,7 +10,7 @@ pull_request_rules:
         method: merge
   - name: label Dependabot
     conditions:
-      - author~=^dependabot(|-preview)\[bot\]$
+      - author=dependabot[bot]
     actions:
       label:
         add:
