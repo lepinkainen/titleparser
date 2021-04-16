@@ -2,7 +2,7 @@
 
 ![test workflow](https://github.com/lepinkainen/titleparser/actions/workflows/workflow.yaml/badge.svg)
 
-A golang implementation of an URL title parser running in AWS Lambda
+A Golang implementation of an URL title parser running in AWS Lambda
 
 - Fetches both the `<title>` element and Opengraph title (`<meta property="og:title" content="Title" />`), preference on the latter as it is usually less spammy.
 
