@@ -46,9 +46,7 @@ func YleAreena(url string) (string, error) {
 	s = doc.Find(`meta[property="og:video:duration"]`)
 	if s != nil && s.Size() > 0 {
 		s_content, _ := s.Attr("content")
-		log.Info(s_content)
 		duration_time, _ := time.ParseDuration(fmt.Sprintf("%ss", s_content))
-		log.Info(duration_time)
 		duration = duration_time.String()
 	}
 	s = doc.Find(`meta[property="og:video:release_date"]`)
