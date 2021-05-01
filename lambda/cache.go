@@ -1,24 +1,70 @@
 package lambda
 
 import (
-	"errors"
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
 // CheckCache will return a non-empty string if the URL given is in the cache
 func CheckCache(query TitleQuery) (string, error) {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("eu-west-1")},
+	)
+
+	if err != nil {
+		log.Errorf("could not connect to AWS %v", err)
+		return "", err
+	}
+
+	input := &dynamodb.GetItemInput{
+		Key: map[string]*dynamodb.AttributeValue{
+			"url": {
+				S: aws.String(query.URL),
+			},
+		},
+		TableName: aws.String("urls"),
+	}
+
+	// Create DynamoDB client
+	svc := dynamodb.New(sess)
+
+	// From: https://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#DynamoDB.GetItem
+	result, err := svc.GetItem(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case dynamodb.ErrCodeProvisionedThroughputExceededException:
+				fmt.Println(dynamodb.ErrCodeProvisionedThroughputExceededException, aerr.Error())
+			case dynamodb.ErrCodeResourceNotFoundException:
+				log.Infof("Didn't find shit")
+				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
+			case dynamodb.ErrCodeRequestLimitExceeded:
+				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
+			case dynamodb.ErrCodeInternalServerError:
+				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			return "", errors.New(err.Error())
+		}
+	}
+
+	// Grab the title from the result and return it
 	// TODO:
-	// connect to dynamodb
-	// attempt to fetch url with query.URL
-	// return title
-	// optionally update ttl in DB
-	return "", errors.New("cache miss")
+	// optionally update ttl in DB -> frequent stuff gets cached longer
+	title := result.Item["title"].S
+	return *title, nil
 }
 
 // CacheAndReturn inserts a successfully found title to cache
