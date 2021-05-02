@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// TODO: Needs AWS credentials on CI to work
+
 func TestCheckCache(t *testing.T) {
 	type args struct {
 		query TitleQuery
@@ -15,6 +17,7 @@ func TestCheckCache(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
+		//{"Not existing", args{TitleQuery{URL: "http://example.com/notexist"}}, "", true},
 		//{"First test", args{TitleQuery{URL: "http://imgur.com/gallery/jqWjOLJ"}}, "any ideas how to clean this moldy leather interrior? [4 images]", false},
 	}
 	for _, tt := range tests {

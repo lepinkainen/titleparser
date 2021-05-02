@@ -1,7 +1,6 @@
 package lambda
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -38,20 +37,21 @@ func CheckCache(query TitleQuery) (string, error) {
 
 	// From: https://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#DynamoDB.GetItem
 	result, err := svc.GetItem(input)
+	// Error when fetching
 	if err != nil {
+		// is it an AWS error?
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
 			case dynamodb.ErrCodeProvisionedThroughputExceededException:
-				fmt.Println(dynamodb.ErrCodeProvisionedThroughputExceededException, aerr.Error())
+				log.Error(dynamodb.ErrCodeProvisionedThroughputExceededException, aerr.Error())
 			case dynamodb.ErrCodeResourceNotFoundException:
-				log.Infof("Didn't find shit")
-				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
+				log.Error(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
 			case dynamodb.ErrCodeRequestLimitExceeded:
-				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
+				log.Error(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
 			case dynamodb.ErrCodeInternalServerError:
-				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
+				log.Error(dynamodb.ErrCodeInternalServerError, aerr.Error())
 			default:
-				fmt.Println(aerr.Error())
+				log.Error(aerr.Error())
 			}
 		} else {
 			// Print the error, cast err to awserr.Error to get the Code and
@@ -63,8 +63,12 @@ func CheckCache(query TitleQuery) (string, error) {
 	// Grab the title from the result and return it
 	// TODO:
 	// optionally update ttl in DB -> frequent stuff gets cached longer
-	title := result.Item["title"].S
-	return *title, nil
+
+	if result.Item != nil {
+		title := result.Item["title"].S
+		return *title, nil
+	}
+	return "", errors.New("Cache miss")
 }
 
 // CacheAndReturn inserts a successfully found title to cache
