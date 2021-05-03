@@ -99,10 +99,13 @@ func Youtube(url string) (string, error) {
 	// Query the API
 	res, err := client.Do(req)
 	if err != nil {
+		log.Error("Error querying Youtube API")
 		log.Fatal(err)
 	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
+		bytes, _ := ioutil.ReadAll(res.Body)
+		fmt.Println(string(bytes[:]))
 		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
 		return "", errors.Wrap(err, "HTTP error")
 	}
