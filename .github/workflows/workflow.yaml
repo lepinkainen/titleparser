@@ -1,6 +1,13 @@
 name: test and build
 on: [push, pull_request, workflow_dispatch]
 
+env:
+  TEST_SHELL: bash
+  IMGUR_KEY: ${{ secrets.IMGUR_KEY }}
+  OMDB_KEY: ${{ secrets.OMDB_KEY }}
+  TWITTER_CLIENTID: ${{ secrets.TWITTER_CLIENTID }}
+  TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
+
 jobs:
   test-nix:
     strategy:
@@ -21,20 +28,8 @@ jobs:
             ${{ runner.os }}-go-
       - name: Run tests
         run: make test
-        env:
-          TEST_SHELL: bash
-          IMGUR_KEY: ${{ secrets.IMGUR_KEY }}
-          OMDB_KEY: ${{ secrets.OMDB_KEY }}
-          TWITTER_CLIENTID: ${{ secrets.TWITTER_CLIENTID }}
-          TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
       - name: Build project
         run: make build
-        env:
-          TEST_SHELL: bash
-          IMGUR_KEY: ${{ secrets.IMGUR_KEY }}
-          OMDB_KEY: ${{ secrets.OMDB_KEY }}
-          TWITTER_CLIENTID: ${{ secrets.TWITTER_CLIENTID }}
-          TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
       - uses: actions/upload-artifact@master
         with:
           name: my-artifact
