@@ -1,6 +1,9 @@
 package handler
 
-import "testing"
+import (
+	"regexp"
+	"testing"
+)
 
 func TestYleAreena(t *testing.T) {
 	t.Parallel()
@@ -14,10 +17,10 @@ func TestYleAreena(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{"Old movie", args{url: "https://areena.yle.fi/1-4192173"}, "Florence [Duration: 1h45m41s Released: 2 years ago]", false},
+		{"Old movie", args{url: "https://areena.yle.fi/1-4192173"}, `Florence \[Duration: 1h45m41s Released: \d years ago\]`, false},
 		{"Old podcast", args{url: "https://areena.yle.fi/audio/1-1792200"}, "Perttu Häkkinen | Audio Areena", false},
 		{"Series main page", args{url: "https://areena.yle.fi/1-3371178"}, "Pikku Kakkonen", false},
-		{"Series episode", args{url: "https://areena.yle.fi/1-50696546"}, "Pikku Kakkonen | Maanantai 5.4.2021 [Duration: 57m35s Released: 3 weeks ago]", false},
+		{"Series episode", args{url: "https://areena.yle.fi/1-50696546"}, `Pikku Kakkonen | Maanantai 5.4.2021 [Duration: 57m35s Released: \d (weeks|months) ago]`, false},
 	}
 	for _, tt := range tests {
 		tt := tt
@@ -28,7 +31,8 @@ func TestYleAreena(t *testing.T) {
 				t.Errorf("YleAreena() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.want {
+			match, err := regexp.MatchString(tt.want, got)
+			if err != nil || !match {
 				t.Errorf("YleAreena() = %v, want %v", got, tt.want)
 			}
 		})
