@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"regexp"
 	"testing"
 )
@@ -32,7 +31,6 @@ func TestTwitter(t *testing.T) {
 				return
 			}
 			match, err := regexp.MatchString(tt.want, got)
-			fmt.Println(match)
 			if err != nil || !match {
 				t.Errorf("Twitter() = %v, want %v", got, tt.want)
 			}
