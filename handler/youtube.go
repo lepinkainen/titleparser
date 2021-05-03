@@ -68,8 +68,7 @@ type YoutubeReply struct {
 
 // OMDB handler
 func Youtube(url string) (string, error) {
-	//youtubeKey := os.Getenv("YOUTUBE_KEY")
-	youtubeKey := "AIzaSyD5a4Johhq5K0ARWX-rQMwsNz0vTtQbKNY"
+	youtubeKey := os.Getenv("YOUTUBE_KEY")
 	if youtubeKey == "" {
 		return "", errors.New("No API key set for Youtube")
 	}
