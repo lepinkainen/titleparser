@@ -15,8 +15,8 @@ func TestYoutube(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{"Marvel 1", args{url: "https://www.youtube.com/watch?v=QdpxoFcdORI"}, `Marvel Studios Celebrates The Movies by Marvel Entertainment \[3m11s - \d+M views - \d+ (hours|days|weeks) ago\]`, false},
-		{"Marvel 1 - short", args{url: "https://youtu.be/QdpxoFcdORI"}, `Marvel Studios Celebrates The Movies by Marvel Entertainment \[3m11s - \d+M views - \d+ (hours|days|weeks) ago\]`, false},
+		{"Marvel 1", args{url: "https://www.youtube.com/watch?v=QdpxoFcdORI"}, `Marvel Studios Celebrates The Movies by Marvel Entertainment \[3m11s - \d+M views - \d+ (hours|days?|weeks?) ago\]`, false},
+		{"Marvel 1 - short", args{url: "https://youtu.be/QdpxoFcdORI"}, `Marvel Studios Celebrates The Movies by Marvel Entertainment \[3m11s - \d+M views - \d+ (hours|days?|weeks?) ago\]`, false},
 		{"Age restricted", args{url: "https://www.youtube.com/watch?v=EX_8ZjT2sO4"}, `Grenouer - Alone in the Dark - \[UNCENSORED - AGE RESTRICTED\] by GrenouerVEVO \[3m59s - \d+M views - \d years ago - age restricted\]`, false},
 		{"At timestamp", args{url: "https://youtu.be/EX_8ZjT2sO4?t=98"}, `Grenouer - Alone in the Dark - \[UNCENSORED - AGE RESTRICTED\] by GrenouerVEVO \[3m59s - \d+M views - \d years ago - age restricted\]`, false},
 		{"Gangnam style", args{url: "https://www.youtube.com/watch?v=9bZkp7q19f0"}, `PSY - GANGNAM STYLE\(강남스타일\) M/V by officialpsy \[4m13s - \d+Billion views - \d+ years ago\]`, false},
