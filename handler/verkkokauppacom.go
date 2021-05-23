@@ -30,10 +30,13 @@ func Verkkokauppa(url string) (string, error) {
 		return "", errors.Wrap(err, "Could not load HTML")
 	}
 
-	selection := doc.Find("h1")
-	title := selection.Contents().Text()
-
-	return title, nil
+	// primarily we want to use og:title
+	s := doc.Find(`meta[property="og:title"]`)
+	if s != nil && s.Size() > 0 {
+		title, _ := s.Attr("content")
+		return title, nil
+	}
+	return "", errors.New("og:title not found")
 }
 
 func init() {

@@ -15,7 +15,7 @@ func TestVerkkokauppa(t *testing.T) {
 		wantErr bool
 	}{
 		{"Nikko", args{url: "https://www.verkkokauppa.com/fi/product/40229/gxqht/Nikko-Vaporizr-2-kauko-ohjattava-auto-sininen"}, "Nikko Vaporizr 2 -kauko-ohjattava auto, sininen", false},
-		{"Fujtech", args{url: "https://www.verkkokauppa.com/fi/product/46243/msgsg/Fuj-tech-USB-Type-C-ulkoinen-kovalevykotelo-2-5-SATA-kovalev"}, "Fuj:tech USB Type-C -ulkoinen kovalevykotelo 2,5\" SATA-kovalevyille", false},
+		{"Fujtech", args{url: "https://www.verkkokauppa.com/fi/product/46243/msgsg/Fuj-tech-USB-Type-C-ulkoinen-kovalevykotelo-2-5-SATA-kovalev"}, "Fuj:tech USB Type-C -ulkoinen kovalevykotelo 2,5\" SATA-kovalevyille 31,90", false},
 	}
 	for _, tt := range tests {
 		tt := tt

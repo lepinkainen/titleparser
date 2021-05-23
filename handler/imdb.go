@@ -19,7 +19,7 @@ var (
 	// TODO: Grab the actual URL query param generation from youtube.go
 	omdbURL = "http://www.omdbapi.com/?i=%s&apikey=%s"
 	// figure out imdb id from url
-	imdbRegex = regexp.MustCompile(`https://www\.imdb\.com/title/(tt.*?)/.*`)
+	imdbRegex = regexp.MustCompile(`https://www\.imdb\.com/title/(tt[\d]+)`)
 )
 
 type omdbReply struct {
