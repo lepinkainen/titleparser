@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/dustin/go-humanize"
 	"github.com/lepinkainen/titleparser/lambda"
 	log "github.com/sirupsen/logrus"
 )
@@ -175,9 +176,6 @@ type RedditPost []struct {
 				NumComments              int           `json:"num_comments"`
 				SendReplies              bool          `json:"send_replies"`
 				Media                    interface{}   `json:"media"`
-				ContestMode              bool          `json:"contest_mode"`
-				AuthorPatreonFlair       bool          `json:"author_patreon_flair"`
-				AuthorFlairTextColor     interface{}   `json:"author_flair_text_color"`
 				Permalink                string        `json:"permalink"`
 				WhitelistStatus          string        `json:"whitelist_status"`
 				Stickied                 bool          `json:"stickied"`
@@ -235,9 +233,11 @@ func Reddit(url string) (string, error) {
 
 	data := apiResponse[0].Data.Children[0].Data
 	over_18 := data.Over18
+	created := time.Unix(int64(data.CreatedUtc), 0)
+	age := humanize.RelTime(created, time.Now(), "ago", "")
 	//author := data.Author
 
-	title := fmt.Sprintf("%s [%d pts, %d comments]", data.Title, data.Score, data.NumComments)
+	title := fmt.Sprintf("%s [%d pts, %d comments, %s]", data.Title, data.Score, data.NumComments, age)
 	if over_18 {
 		title = fmt.Sprint("% (NSFW)", title)
 	}
@@ -246,6 +246,5 @@ func Reddit(url string) (string, error) {
 }
 
 func init() {
-	// https://www.reddit.com/r/CryptoCurrency/comments/noztp7/binance_ceo_cz_shades_elon_musk_in_tweet_when_you/.json
 	lambda.RegisterHandler(RedditMatch, Reddit)
 }
