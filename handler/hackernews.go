@@ -69,7 +69,7 @@ func HackerNews(url string) (string, error) {
 
 	err = json.Unmarshal(body, &apiResponse)
 	if err != nil {
-		_ = fmt.Errorf("Unable to unmarshal JSON response: %#v", err)
+		_ = fmt.Errorf("unable to unmarshal JSON response: %#v", err)
 		return "", err
 	}
 
