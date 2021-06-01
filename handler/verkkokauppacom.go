@@ -40,5 +40,5 @@ func Verkkokauppa(url string) (string, error) {
 }
 
 func init() {
-	lambda.RegisterHandler("https://www.verkkokauppa.com/.*?/product/*.?", Verkkokauppa)
+	lambda.RegisterHandler(".*?verkkokauppa.com/.*?/product/*.?", Verkkokauppa)
 }
