@@ -239,7 +239,7 @@ func Reddit(url string) (string, error) {
 
 	title := fmt.Sprintf("%s [%d pts, %d comments, %s]", data.Title, data.Score, data.NumComments, age)
 	if over_18 {
-		title = fmt.Sprint("% (NSFW)", title)
+		title = fmt.Sprintf("%s (NSFW)", title)
 	}
 
 	return title, nil
