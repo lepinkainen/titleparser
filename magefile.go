@@ -1,4 +1,5 @@
-//+build mage
+//go:build mage
+// +build mage
 
 package main
 
@@ -34,7 +35,8 @@ func Vet() error {
 func Test() error {
 	fmt.Println("Testing...")
 	mg.Deps(Vet)
-	return sh.RunV("go", "test", "-race", "-cover", "-v", "./...")
+	//return sh.RunV("go", "test", "-race", "-cover", "-v", "./...")
+	return sh.RunV("go", "test", "-cover", "-v", "./...")
 }
 
 func Lint() error {
