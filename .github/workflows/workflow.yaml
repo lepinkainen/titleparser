@@ -41,3 +41,6 @@ jobs:
         with:
           name: titleparser.zip
           path: build/titleparser
+      - name: Deploy
+        run: |
+          aws lambda update-function-code --publish --function-name titleparser --zip-file fileb://titleparser.zip
