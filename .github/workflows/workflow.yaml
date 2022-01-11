@@ -29,6 +29,13 @@ jobs:
           TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
         run: make test
       - name: Build project
+        env:
+          TEST_SHELL: bash
+          IMGUR_KEY: ${{ secrets.IMGUR_KEY }}
+          OMDB_KEY: ${{ secrets.OMDB_KEY }}
+          YOUTUBE_KEY: ${{ secrets.YOUTUBE_KEY }}
+          TWITTER_CLIENTID: ${{ secrets.TWITTER_CLIENTID }}
+          TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
         run: make build
       - uses: actions/upload-artifact@master
         with:
