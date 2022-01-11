@@ -45,6 +45,10 @@ var (
 
 // Twitter single tweet urls
 func Twitter(url string) (string, error) {
+	if os.Getenv("TWITTER_CLIENTID") == "" || os.Getenv("TWITTER_CLIENTSECRET") == "" {
+		log.Error("Client ID or secret not set")
+	}
+
 	groups := twitterRegex.FindStringSubmatch(url)
 	tweetID, err := strconv.ParseInt(groups[1], 10, 64)
 	if err != nil {
