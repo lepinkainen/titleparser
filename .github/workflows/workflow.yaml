@@ -33,5 +33,5 @@ jobs:
         run: make build
       - uses: actions/upload-artifact@master
         with:
-          name: my-artifact
-          path: build/*
+          name: titleparser.zip
+          path: build/titleparser
