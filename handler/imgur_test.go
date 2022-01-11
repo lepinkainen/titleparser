@@ -1,6 +1,8 @@
 package handler
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestImgur(t *testing.T) {
 	t.Parallel()
