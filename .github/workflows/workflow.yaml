@@ -1,14 +1,6 @@
 name: test and build
 on: [push, pull_request, workflow_dispatch]
 
-env:
-  TEST_SHELL: bash
-  IMGUR_KEY: ${{ secrets.IMGUR_KEY }}
-  OMDB_KEY: ${{ secrets.OMDB_KEY }}
-  YOUTUBE_KEY: ${{ secrets.YOUTUBE_KEY }}
-  TWITTER_CLIENTID: ${{ secrets.TWITTER_CLIENTID }}
-  TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
-
 jobs:
   test-nix:
     strategy:
@@ -28,6 +20,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
       - name: Run tests
+        env:
+          TEST_SHELL: bash
+          IMGUR_KEY: ${{ secrets.IMGUR_KEY }}
+          OMDB_KEY: ${{ secrets.OMDB_KEY }}
+          YOUTUBE_KEY: ${{ secrets.YOUTUBE_KEY }}
+          TWITTER_CLIENTID: ${{ secrets.TWITTER_CLIENTID }}
+          TWITTER_CLIENTSECRET: ${{ secrets.TWITTER_CLIENTSECRET }}
         run: make test
       - name: Build project
         run: make build
