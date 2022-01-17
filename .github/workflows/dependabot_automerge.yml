@@ -1,4 +1,3 @@
-### .github/workflows/dependabot_automerge.yml
 ### This workflow has access to secrets and a read-write token
 name: Dependabot Automerge
 on:
