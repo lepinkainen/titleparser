@@ -11,6 +11,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	// TODO: This library has been archived, need to find a replacement
+	//nolint:staticcheck
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dustin/go-humanize"
 	"github.com/lepinkainen/titleparser/lambda"

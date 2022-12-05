@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"regexp"
@@ -60,7 +60,7 @@ func OMDB(url string) (string, error) {
 	}
 
 	// error ignored on purpose
-	bytes, _ := ioutil.ReadAll(res.Body)
+	bytes, _ := io.ReadAll(res.Body)
 
 	// unmarshal JSON
 	var reply omdbReply

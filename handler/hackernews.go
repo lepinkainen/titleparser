@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 	"time"
@@ -65,7 +65,7 @@ func HackerNews(url string) (string, error) {
 
 	var apiResponse HNAPIResponse
 
-	body, _ := ioutil.ReadAll(res.Body)
+	body, _ := io.ReadAll(res.Body)
 
 	err = json.Unmarshal(body, &apiResponse)
 	if err != nil {

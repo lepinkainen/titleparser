@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"regexp"
@@ -104,14 +104,14 @@ func Youtube(url string) (string, error) {
 	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
-		bytes, _ := ioutil.ReadAll(res.Body)
+		bytes, _ := io.ReadAll(res.Body)
 		fmt.Println(string(bytes[:]))
 		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
 		return "", errors.Wrap(err, "HTTP error")
 	}
 
 	// error ignored on purpose
-	bytes, _ := ioutil.ReadAll(res.Body)
+	bytes, _ := io.ReadAll(res.Body)
 
 	// unmarshal JSON
 	var reply YoutubeReply
