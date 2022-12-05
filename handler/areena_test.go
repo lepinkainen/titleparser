@@ -17,10 +17,10 @@ func TestYleAreena(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{"Old movie", args{url: "https://areena.yle.fi/1-4192173"}, `Florence \[Duration: 1h45m41s Released: \d years ago\]`, false},
+		{"Old movie", args{url: "https://areena.yle.fi/1-4192173"}, "Florence", false},
 		{"Old podcast", args{url: "https://areena.yle.fi/audio/1-1792200"}, "Perttu Häkkinen | Audio Areena", false},
 		{"Series main page", args{url: "https://areena.yle.fi/1-3371178"}, "Pikku Kakkonen", false},
-		{"Series episode", args{url: "https://areena.yle.fi/1-50696546"}, `Pikku Kakkonen | Maanantai 5.4.2021 [Duration: 57m35s Released: \d (weeks|months) ago]`, false},
+		{"Series episode", args{url: "https://areena.yle.fi/1-50696546"}, "Maanantai 5.4.2021 | Pikku Kakkonen", false},
 	}
 	for _, tt := range tests {
 		tt := tt
