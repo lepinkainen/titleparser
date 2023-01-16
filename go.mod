@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-lambda-go v1.36.0
 	github.com/aws/aws-sdk-go v1.44.153
 	github.com/dghubble/go-twitter v0.0.0-20221104224141-912508c3888b
-	github.com/dustin/go-humanize v1.0.0
+	github.com/dustin/go-humanize v1.0.1
 	github.com/joho/godotenv v1.4.0
 	github.com/magefile/mage v1.14.0
 	github.com/pkg/errors v0.9.1
