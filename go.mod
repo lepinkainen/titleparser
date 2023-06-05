@@ -11,7 +11,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/magefile/mage v1.15.0
 	github.com/pkg/errors v0.9.1
-	github.com/sirupsen/logrus v1.9.2
+	github.com/sirupsen/logrus v1.9.3
 	golang.org/x/oauth2 v0.8.0
 )
 
