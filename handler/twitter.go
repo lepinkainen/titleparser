@@ -15,7 +15,6 @@ import (
 	//nolint:staticcheck
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dustin/go-humanize"
-	"github.com/lepinkainen/titleparser/lambda"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -98,7 +97,10 @@ func Twitter(url string) (string, error) {
 	return tweetString, nil
 }
 
+/**
+ Elon fucked the API, disable this handler for now
 // Register the handler function with corresponding regex
 func init() {
 	lambda.RegisterHandler(`.*?twitter\.com/.*?/status/.*?`, Twitter)
 }
+*/
