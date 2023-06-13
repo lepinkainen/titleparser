@@ -25,7 +25,7 @@ func TestOMDB(t *testing.T) {
 			false},
 		{"MacGyver - TV",
 			args{url: "https://www.imdb.com/title/tt0088559/"},
-			"MacGyver (1985–1992) [IMDb 7.7/10] [RT N/A] [Meta N/A]",
+			"MacGyver (1985–1992) [IMDb 7.6/10] [RT N/A] [Meta N/A]",
 			false},
 		{"No ID in URL",
 			args{url: "https://www.imdb.com/"},
