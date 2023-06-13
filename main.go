@@ -44,24 +44,27 @@ func main() {
 		TODO: JSON Protocol for communication, body payload w/ apikey
 	*/
 
+	// Local mode calls like this with httpie:
+	// http http://localhost:8081/title url="http://mantta.fi"
+
 	http.HandleFunc("/title", func(w http.ResponseWriter, r *http.Request) {
 
 		decoder := json.NewDecoder(r.Body)
 		var query lambda.TitleQuery
 		err := decoder.Decode(&query)
 		if err != nil {
-			log.Errorln("OMGLOL")
+			log.Errorln("No URL given")
 			return
 		}
 
 		res, err := lambda.HandleRequest(context.Background(), query)
 		if err != nil {
-			_ = fmt.Errorf("Error handling request: %#v", err)
+			_ = fmt.Errorf("error handling request: %#v", err)
 		}
 
 		q, err := json.Marshal(res)
 		if err != nil {
-			_ = fmt.Errorf("Error marshaling response JSON: %#v", err)
+			_ = fmt.Errorf("error marshaling response JSON: %#v", err)
 		}
 
 		fmt.Fprint(w, string(q))
