@@ -2,7 +2,7 @@ package handler
 
 import "github.com/lepinkainen/titleparser/lambda"
 
-// ApinaBiz titles are always useless, just don't return anything
+// Twitter is blocking external agents, so just return empty
 func Twitter(url string) (string, error) {
 	return "", nil
 }
