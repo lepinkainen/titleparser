@@ -1,4 +1,5 @@
 FUNCNAME=titleparser
+BINARYNAME=bootstrap
 BUILDDIR=build
 
 # Include .env and export them as environment variables
@@ -13,8 +14,8 @@ build_local: test
 	go build -o $(FUNCNAME)
 
 build: test
-	env GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o $(BUILDDIR)/$(FUNCNAME)
-	cd $(BUILDDIR) && zip $(FUNCNAME).zip $(FUNCNAME)
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags lambda.norpc -o $(BUILDDIR)/$(BINARYNAME)
+	cd $(BUILDDIR) && zip $(FUNCNAME).zip $(BINARYNAME)
 
 test:
 	go vet ./...
