@@ -17,7 +17,7 @@ func TestOMDB(t *testing.T) {
 	}{
 		{"The Matrix - movie",
 			args{url: "https://www.imdb.com/title/tt0133093/"},
-			"The Matrix (1999) [IMDb 8.7/10] [RT 88%] [Meta 73/100]",
+			"The Matrix (1999) [IMDb 8.7/10] [RT 83%] [Meta 73/100]",
 			false},
 		{"LOTR - movie - ref",
 			args{url: "https://www.imdb.com/title/tt0120737/?ref_=fn_al_tt_1"},
@@ -33,7 +33,7 @@ func TestOMDB(t *testing.T) {
 			true},
 		{"The Matrix - movie - no ending slash",
 			args{url: "https://www.imdb.com/title/tt0133093"},
-			"The Matrix (1999) [IMDb 8.7/10] [RT 88%] [Meta 73/100]",
+			"The Matrix (1999) [IMDb 8.7/10] [RT 83%] [Meta 73/100]",
 			false},
 		{"Wrong URL", args{url: "http://mantta.fi"}, "", true},
 	}
