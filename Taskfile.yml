@@ -1,0 +1,48 @@
+version: "3"
+
+vars:
+  FUNCNAME: titleparser
+  BUILDDIR: build
+
+dotenv: [".env", "{{.ENV}}/.env.", "{{.HOME}}/.env"]
+
+tasks:
+  default:
+    desc: Default task, runs build
+    cmds:
+      - task: build
+
+  build-local:
+    deps: [test]
+    cmds:
+      - go build -o {{.FUNCNAME}}
+
+  build:
+    desc: Build the Go application
+    deps:
+      - task: test
+    cmds:
+      - env GOOS=linux GOARCH=amd64 go build -ldflags="-X main.Version={{.GIT_COMMIT}}" -o {{.BUILDDIR}}/{{.FUNCNAME}}
+      - cd {{.BUILDDIR}} && zip {{.FUNCNAME}}.zip {{.FUNCNAME}}
+    generates:
+      - "{{.BUILDDIR}}/{{.FUNCNAME}}"
+      - "{{.BUILDDIR}}/{{.FUNCNAME}}.zip"
+    vars:
+      GIT_COMMIT:
+        sh: git log -n 1 --format=%h
+
+  test:
+    cmds:
+      - go vet ./...
+      - go test -cover -v ./...
+
+  lint:
+    desc: Run Go linters
+    cmds:
+      - golangci-lint run ./...
+    silent: true # to ignore errors but keep the output
+
+  publish:
+    deps: [lint, build]
+    cmds:
+      - aws lambda update-function-code --publish --function-name {{.FUNCNAME}} --zip-file fileb://{{.BUILDDIR}}/{{.FUNCNAME}}.zip

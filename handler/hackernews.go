@@ -37,7 +37,7 @@ type HNAPIResponse struct {
 func HackerNews(url string) (string, error) {
 	storyID := hnRegex.FindStringSubmatch(url)
 
-	if storyID == nil || len(storyID) < 2 {
+	if len(storyID) < 2 {
 		return "", nil
 	}
 

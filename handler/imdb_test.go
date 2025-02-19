@@ -21,7 +21,7 @@ func TestOMDB(t *testing.T) {
 			false},
 		{"LOTR - movie - ref",
 			args{url: "https://www.imdb.com/title/tt0120737/?ref_=fn_al_tt_1"},
-			"The Lord of the Rings: The Fellowship of the Ring (2001) [IMDb 8.8/10] [RT 91%] [Meta 92/100]",
+			"The Lord of the Rings: The Fellowship of the Ring (2001) [IMDb 8.9/10] [RT 92%] [Meta 92/100]",
 			false},
 		{"MacGyver - TV",
 			args{url: "https://www.imdb.com/title/tt0088559/"},

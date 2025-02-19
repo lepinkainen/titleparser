@@ -18,7 +18,7 @@ func TestYleAreena(t *testing.T) {
 		wantErr bool
 	}{
 		{"Old movie", args{url: "https://areena.yle.fi/1-4192173"}, "Florence", false},
-		{"Old podcast", args{url: "https://areena.yle.fi/audio/1-1792200"}, "Perttu Häkkinen | Audio Areena", false},
+		{"Old podcast", args{url: "https://areena.yle.fi/audio/1-1792200"}, "Perttu Häkkinen", false},
 		{"Series main page", args{url: "https://areena.yle.fi/1-3371178"}, "Pikku Kakkonen", false},
 		{"Series episode", args{url: "https://areena.yle.fi/1-50696546"}, "Maanantai 5.4.2021 | Pikku Kakkonen", false},
 	}
