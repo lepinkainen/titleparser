@@ -6,3 +6,5 @@ build/
 
 # Api keys and stuff for unit tests and development
 .env
+
+.task/
