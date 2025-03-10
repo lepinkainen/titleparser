@@ -2,9 +2,9 @@ name: Build and Test
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
@@ -18,17 +18,19 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24'
+          go-version: "1.24"
           cache: true
 
       - name: Install Task
         uses: arduino/setup-task@v1
         with:
-          version: '3.x'
+          version: "3.x"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
-        run: go mod download
+        run: |
+          go mod download
+          go get github.com/dustin/go-humanize
 
       - name: Lint
         run: |
