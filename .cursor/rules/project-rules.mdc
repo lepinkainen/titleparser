@@ -1,0 +1,22 @@
+---
+description: project language and style
+globs: 
+alwaysApply: true
+---
+# Titleparser Project Rules
+
+## Core Guidelines
+
+- **Language:** Go only (no Python or other languages)
+- **Build System:** Use Taskfile
+- **Unit Tests:** Write basic unit tests for new functionality. Always check the tests pass after finishing changes.
+- **Purpose:** See README.md for project definition
+
+## Project Structure
+- `handler/`: Site-specific parsers (Reddit, YouTube, HackerNews, etc.)
+- `lambda/`: Core functionality (request handling, caching)
+
+## Implementation Requirements
+
+- Maintain consistent Go style and idiomatic patterns
+- Follow the existing architectural patterns
