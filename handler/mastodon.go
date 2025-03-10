@@ -93,7 +93,7 @@ func Mastodon(url string) (string, error) {
 		if len(content) > 100 {
 			content = content[:97] + "..."
 		}
-		
+
 		if timestamp != "" {
 			title = fmt.Sprintf("@%s: %s [%s]", username, content, timestamp)
 		} else {
@@ -101,7 +101,7 @@ func Mastodon(url string) (string, error) {
 		}
 	} else {
 		// Fallback to og:title if we couldn't extract content
-		title := doc.Find(`meta[property="og:title"]`).AttrOr("content", "")
+		title = doc.Find(`meta[property="og:title"]`).AttrOr("content", "")
 		if title == "" {
 			title = doc.Find("title").Text()
 		}

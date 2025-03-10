@@ -18,7 +18,9 @@
 - Use descriptive function and variable names
 - Prefer OpenGraph titles when available
 - Use testdata fixtures for consistent testing
+- Check `.cursor/rules/` directory for project-specific Cursor rules
 
 ## Project Structure
 - `handler/`: Site-specific parsers (Reddit, YouTube, HackerNews, etc.)
 - `lambda/`: Core functionality (request handling, caching)
+- `.cursor/rules/`: Cursor rule files with project standards and guidelines
