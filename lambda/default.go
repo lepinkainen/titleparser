@@ -26,7 +26,8 @@ var (
 
 // DefaultHandler is the fallback for sites that don't have a special handler
 // TODO: Split to two parts: 1) fetch url 2) parse title from html
-// 		 Tests for both parts
+//
+//	Tests for both parts
 func DefaultHandler(url string) (string, error) {
 	// Request the HTML page.
 	res, err := http.Get(url)
@@ -42,7 +43,20 @@ func DefaultHandler(url string) (string, error) {
 	}
 
 	if res.StatusCode != 200 {
-		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
+		if res.StatusCode == 403 {
+			return "", errors.New("403 Forbidden")
+		} else if res.StatusCode == 404 {
+			return "", errors.New("404 Not Found")
+		} else if res.StatusCode == 405 {
+			return "", errors.New("405 Method Not Allowed")
+		} else if res.StatusCode == 429 {
+			return "", errors.New("429 Too Many Requests")
+		} else if res.StatusCode == 500 {
+			return "", errors.New("500 Internal Server Error")
+		} else if res.StatusCode == 502 {
+			return "", errors.New("502 Bad Gateway")
+		}
+		log.Fatalf("unhandled status code: %d (%s)", res.StatusCode, res.Status)
 		return "", errors.Wrap(err, "HTTP error")
 	}
 
