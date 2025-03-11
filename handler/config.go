@@ -4,7 +4,7 @@ package handler
 
 var (
 	// UserAgent string to use when connecting to servers
-	UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:107.0) Gecko/20100101 Firefox/107.0"
+	UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3 Safari/605.1.15"
 	// AcceptLanguage header
 	AcceptLanguage = "*"
 	// Accept header
