@@ -1,6 +1,6 @@
 # titleparser
 
-![test workflow](https://github.com/lepinkainen/titleparser/actions/workflows/workflow.yaml/badge.svg)
+![test workflow](https://github.com/lepinkainen/titleparser/actions/workflows/ci.yml/badge.svg≤)
 
 A Golang implementation of an URL title parser running in AWS Lambda
 
