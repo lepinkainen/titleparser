@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -219,17 +220,36 @@ func Reddit(url string) (string, error) {
 	}
 	defer res.Body.Close()
 
-	var apiResponse RedditPost
-	dec := json.NewDecoder(res.Body)
-	//bytes, _ := ioutil.ReadAll(res.Body)
-	//fmt.Println(string(bytes))
-	err = dec.Decode(&apiResponse)
-	if err != nil {
-		_ = fmt.Errorf("error decoding API response: %v", err)
-		return "", err
+	// Check the content type to see if we got JSON or HTML
+	contentType := res.Header.Get("Content-Type")
+	if strings.Contains(contentType, "text/html") || res.StatusCode != http.StatusOK {
+		log.Warnf("Reddit API returned HTML instead of JSON. Status: %d, URL: %s", res.StatusCode, url)
+
+		// Read a bit of the response to see what's being returned
+		bodyStart, _ := io.ReadAll(io.LimitReader(res.Body, 1000))
+		log.Debugf("Response body starts with: %s", string(bodyStart))
+
+		return "", fmt.Errorf("reddit API returned non-JSON response (status %d): possibly rate limited or blocked", res.StatusCode)
 	}
 
-	//fmt.Println(apiResponse[0].Data.Children[0])
+	var apiResponse RedditPost
+	dec := json.NewDecoder(res.Body)
+	err = dec.Decode(&apiResponse)
+	if err != nil {
+		// Check for the specific JSON decoding error related to HTML content
+		if strings.Contains(err.Error(), "invalid character '<'") {
+			log.Warnf("Received HTML instead of JSON from Reddit API: %v", err)
+			return "", fmt.Errorf("reddit API returned HTML instead of JSON: possibly rate limited or blocked")
+		}
+
+		log.Warnf("Error decoding API response: %v", err)
+		return "", fmt.Errorf("error decoding reddit API response: %v", err)
+	}
+
+	// Check if we have valid data
+	if len(apiResponse) == 0 || len(apiResponse[0].Data.Children) == 0 {
+		return "", fmt.Errorf("no valid data returned from reddit API")
+	}
 
 	data := apiResponse[0].Data.Children[0].Data
 	over_18 := data.Over18
