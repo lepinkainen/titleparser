@@ -308,7 +308,7 @@ func Imgur(url string) (string, error) {
 // Register the handler function with corresponding regex
 func init() {
 	if os.Getenv("IMGUR_KEY") != "" {
-		lambda.RegisterHandler(".*?imgur.com.*", Imgur)
+		lambda.RegisterHandler(".*?imgur\\.com.*", Imgur)
 	}
 	_ = fmt.Errorf("IMGUR_KEY not set, handler inactive")
 }
