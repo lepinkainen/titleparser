@@ -9,5 +9,5 @@ func Pr0gramm(url string) (string, error) {
 
 // Register the handler function with corresponding regex
 func init() {
-	lambda.RegisterHandler(".*?pr0gramm.com.*", Pr0gramm)
+	lambda.RegisterHandler(`.*?pr0gramm\.com.*`, Pr0gramm)
 }
