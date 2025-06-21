@@ -27,8 +27,8 @@ jobs:
           version: "3.x"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      #      - name: Test
-      #        run: task test
+      - name: Test
+        run: go test -tags=ci ./...
 
       - name: Build
         run: task build
