@@ -2,7 +2,7 @@ pull_request_rules:
   - name: automatic Dependabot merge when CI passes
     conditions:
       - author=dependabot[bot]
-      - check-success=test-nix (ubuntu-latest)
+      - check-success=Build and Test
       - check-success=Scan
       - base=master
     actions:
