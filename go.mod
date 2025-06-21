@@ -4,7 +4,7 @@ go 1.24
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.2
-	github.com/aws/aws-lambda-go v1.47.0
+	github.com/aws/aws-lambda-go v1.49.0
 	github.com/aws/aws-sdk-go v1.55.6
 	github.com/dustin/go-humanize v1.0.1
 	github.com/joho/godotenv v1.5.1
