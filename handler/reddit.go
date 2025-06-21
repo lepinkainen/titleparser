@@ -13,7 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var RedditMatch = ".*reddit.com/r/.*/comments/.*/.*"
+var RedditMatch = `.*reddit\.com/r/.*/comments/.*/.*`
 
 type RedditPost []struct {
 	Kind string `json:"kind"`
