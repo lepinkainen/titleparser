@@ -9,5 +9,5 @@ func Twitter(url string) (string, error) {
 
 // Register the handler function with corresponding regex
 func init() {
-	lambda.RegisterHandler(".*?twitter.com.*", Twitter)
+	lambda.RegisterHandler(`.*?twitter\.com.*`, Twitter)
 }
