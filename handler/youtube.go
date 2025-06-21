@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -138,7 +139,13 @@ func Youtube(url string) (string, error) {
 	agestr := humanize.RelTime(publishedAt, time.Now(), "ago", "from now")
 
 	viewCount, _ := strconv.ParseInt(video.Statistics.ViewCount, 10, 64)
-	views := HumanizeNumber(int(viewCount))
+	var views string
+	if viewCount >= math.MinInt && viewCount <= math.MaxInt {
+		views = HumanizeNumber(int(viewCount))
+	} else {
+		log.Warnf("View count exceeds int range: %d", viewCount)
+		views = HumanizeNumber(math.MaxInt) // Use max int value as fallback
+	}
 
 	// Ralph Breaks the Internet (2018)
 	title := fmt.Sprintf("%s by %s [%s - %s views - %s%s]", video.Snippet.Title, video.Snippet.ChannelTitle, duration, views, agestr, ageRestricted)
