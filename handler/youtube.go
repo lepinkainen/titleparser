@@ -22,7 +22,7 @@ var (
 	apiURL = "https://www.googleapis.com/youtube/v3/videos"
 
 	youtubeRegex1 = regexp.MustCompile(`https?://youtu.be/([^\?]+)([\?#]t=.*)?`)
-	youtubeRegex2 = regexp.MustCompile(`https?://.*?youtube.com/watch\?.*?v=([^&#]+)`)
+	youtubeRegex2 = regexp.MustCompile(`https?://.*?youtube\.com/watch\?.*?v=([^&#]+)`)
 )
 
 type YoutubeReply struct {
