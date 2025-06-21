@@ -148,5 +148,5 @@ func Youtube(url string) (string, error) {
 
 func init() {
 	lambda.RegisterHandler(".*youtu.be.*", Youtube)
-	lambda.RegisterHandler(".*youtube.com.*", Youtube)
+	lambda.RegisterHandler(".*youtube\\.com.*", Youtube)
 }
