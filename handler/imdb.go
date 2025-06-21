@@ -94,5 +94,5 @@ func OMDB(url string) (string, error) {
 }
 
 func init() {
-	lambda.RegisterHandler(".*?imdb.com/title/tt.*", OMDB)
+	lambda.RegisterHandler(".*?imdb\\.com/title/tt.*", OMDB)
 }
