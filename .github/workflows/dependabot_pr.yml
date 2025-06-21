@@ -3,6 +3,9 @@
 name: Dependabot PR Check
 on: pull_request
 
+permissions:
+  contents: read
+
 jobs:
   check-dependabot:
     runs-on: ubuntu-latest
