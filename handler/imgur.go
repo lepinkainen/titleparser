@@ -26,7 +26,7 @@ var (
 
 	// just plain imgur image -> imgur.com/asdf.<any extension> will match
 	// Should handle jpg, gifv etc
-	imageRegex = regexp.MustCompile(`.?imgur\.com/([^\.]+)`)
+	imageRegex = regexp.MustCompile(`\.?imgur\.com/([^\.]+)`)
 )
 
 // ImgurResponse is the imgur generic API response for all gallery queries
