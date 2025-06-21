@@ -88,5 +88,5 @@ func HackerNews(url string) (string, error) {
 
 // Register the handler function with corresponding regex
 func init() {
-	lambda.RegisterHandler(".*?news.ycombinator.com.*", HackerNews)
+	lambda.RegisterHandler(".*?news\\.ycombinator\\.com.*", HackerNews)
 }
