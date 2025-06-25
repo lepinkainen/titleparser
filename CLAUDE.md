@@ -1,6 +1,9 @@
 # Titleparser Development Guide
 
+Refer to llm-shared/project_tech_stack.md for general project standards and guidelines.
+
 ## Build Commands
+
 - Build (Lambda): `task build`
 - Build (Local): `task build-local`
 - Test All: `task test`
@@ -9,6 +12,7 @@
 - Clean: `task clean`
 
 ## Code Style Guidelines
+
 - Follow Go standard practices (gofmt formatting)
 - Use table-driven tests with t.Parallel() for concurrency
 - Define regex constants at package level
@@ -21,6 +25,7 @@
 - Check `.cursor/rules/` directory for project-specific Cursor rules
 
 ## Project Structure
+
 - `handler/`: Site-specific parsers (Reddit, YouTube, HackerNews, etc.)
 - `lambda/`: Core functionality (request handling, caching)
 - `.cursor/rules/`: Cursor rule files with project standards and guidelines
