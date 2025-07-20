@@ -106,3 +106,56 @@ func sanitize(title string) string {
 
 	return title
 }
+
+// ParseHTMLFromResponse extracts title from an HTTP response
+// This is used by custom handlers that need to do their own HTTP requests
+func ParseHTMLFromResponse(res *http.Response, url string) (string, error) {
+	// Not html, don't bother parsing
+	contentType := res.Header.Get("content-type")
+	if !strings.HasPrefix(contentType, "text/html") {
+		return "", ErrNotHTML
+	}
+
+	if res.StatusCode != 200 {
+		if res.StatusCode == 403 {
+			return "", errors.New("403 Forbidden")
+		} else if res.StatusCode == 404 {
+			return "", errors.New("404 Not Found")
+		} else if res.StatusCode == 405 {
+			return "", errors.New("405 Method Not Allowed")
+		} else if res.StatusCode == 429 {
+			return "", errors.New("429 Too Many Requests")
+		} else if res.StatusCode == 500 {
+			return "", errors.New("500 Internal Server Error")
+		} else if res.StatusCode == 502 {
+			return "", errors.New("502 Bad Gateway")
+		}
+		log.Errorf("unhandled status code: %d (%s) for URL: %s", res.StatusCode, res.Status, url)
+		return "", fmt.Errorf("HTTP error: %d %s", res.StatusCode, res.Status)
+	}
+
+	// Load the HTML document
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		log.Errorf("Could not load HTML from %s: %v", url, err)
+		return "", errors.Wrap(err, "Could not load HTML")
+	}
+
+	// primarily we want to use og:title
+	s := doc.Find(`meta[property="og:title"]`)
+	if s != nil && s.Size() > 0 {
+		title, _ := s.Attr("content")
+		return sanitize(title), nil
+	}
+
+	// Bleh, just a boring old title then
+	s = doc.Find("title")
+	if s != nil && s.Size() > 0 {
+		// Just grab the first one, some pages (ab)use the title element
+		title := s.First().Text()
+		return sanitize(title), nil
+	}
+
+	// No title, report it
+	return "", ErrTitleNotFound
+}
