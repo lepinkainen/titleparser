@@ -1,12 +1,15 @@
 package handler
 
+import "github.com/lepinkainen/titleparser/common"
+
 // Common configuration for all handlers
+// Re-export from common package for backward compatibility
 
 var (
 	// UserAgent string to use when connecting to servers
-	UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3 Safari/605.1.15"
+	UserAgent = common.UserAgent
 	// AcceptLanguage header
-	AcceptLanguage = "*"
+	AcceptLanguage = common.AcceptLanguage
 	// Accept header
-	Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+	Accept = common.Accept
 )
