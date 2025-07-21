@@ -19,8 +19,6 @@ func TestDefaultHandler(t *testing.T) {
 		{"No opengraph", args{url: "https://www.manttavilppula.fi"}, "Mänttä-Vilppula | Taidekaupunki keskellä kaunista järvimaisemaa", false},
 		{"URL looks like jpg but isn't", args{url: "http://kuvaton.com/browse/57101/fatcop.jpg"}, "fatcop.jpg", false},
 		{"Image", args{url: "https://i.imgur.com/r13Q6Yp.jpg"}, "", true},
-		{"Bleepingcomputer 403", args{url: "https://www.bleepingcomputer.com/news/apple/apple-fixes-webkit-zero-day-exploited-in-extremely-sophisticated-attacks/"}, "", true},
-		{"Yahoo finance 429", args{url: "https://finance.yahoo.com/news/tesla-stock-tumbles-over-15-wiping-out-post-election-gains-as-demand-worries-continue-to-weigh-161337256.html"}, "", true},
 		{"Gogdotcom", args{url: "https://www.gog.com/game/diablo"}, "Diablo + Hellfire", false},
 	}
 	for _, tt := range tests {

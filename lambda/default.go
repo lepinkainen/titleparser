@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/lepinkainen/titleparser/common"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
@@ -29,8 +31,22 @@ var (
 //
 //	Tests for both parts
 func DefaultHandler(url string) (string, error) {
-	// Request the HTML page.
-	res, err := http.Get(url)
+	// Create request with proper browser headers to avoid User-Agent blocking
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Set headers to avoid 403 Forbidden from sites that block Go client
+	req.Header.Set("User-Agent", common.UserAgent)
+	req.Header.Set("Accept-Language", common.AcceptLanguage)
+	req.Header.Set("Accept", common.Accept)
+
+	// Set client timeout (10 seconds, consistent with other handlers)
+	client := &http.Client{Timeout: time.Second * 10}
+
+	// Send request
+	res, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
