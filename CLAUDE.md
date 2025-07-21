@@ -1,6 +1,7 @@
 # Titleparser Development Guide
 
 **Important**: This project follows standardized guidelines from the `llm-shared/` submodule:
+
 - **General project standards**: `llm-shared/project_tech_stack.md`
 - **Go-specific guidelines**: `llm-shared/languages/go.md`
 - **GitHub issue management**: `llm-shared/GITHUB.md`
@@ -11,6 +12,7 @@
 Titleparser is a Go AWS Lambda function that extracts titles from URLs with custom parsers for specific sites (Reddit, YouTube, HackerNews, etc.). The architecture uses a plugin-style pattern where handlers register themselves via `init()` functions.
 
 **Core Flow:**
+
 1. `lambda/main.go` receives TitleQuery via AWS Lambda
 2. Iterates through registered handlers (pattern matching against URL)
 3. Falls back to default OpenGraph/HTML title extraction
@@ -30,12 +32,14 @@ Titleparser is a Go AWS Lambda function that extracts titles from URLs with cust
 The application supports local testing mode via the `RUNMODE` environment variable:
 
 **1. Build and run locally:**
+
 ```bash
 task build-local          # Creates native binary 'titleparser'
 RUNMODE=local ./titleparser  # Starts HTTP server on localhost:8081
 ```
 
 **2. Test the title parsing endpoint:**
+
 ```bash
 # Using httpie:
 http POST http://localhost:8081/title url="http://example.com"
@@ -47,11 +51,13 @@ curl -X POST http://localhost:8081/title \
 ```
 
 **3. Available endpoints:**
+
 - `POST /title` - Main title parsing (same JSON format as Lambda)
 - `GET /hi` - Simple health check
 - `GET /` - Hello world test
 
 **Local mode differences:**
+
 - No DynamoDB caching (results not stored)
 - HTTP server instead of Lambda runtime
 - All custom handlers work identically to production
@@ -59,6 +65,7 @@ curl -X POST http://localhost:8081/title \
 ## Handler Registration Pattern
 
 Each site parser follows this pattern (see `handler/reddit.go`):
+
 ```go
 var RedditMatch = `.*reddit\.com/r/.*/comments/.*/.*`  // Package-level regex
 
@@ -74,11 +81,13 @@ func init() {
 ## Code Style Guidelines
 
 **Critical formatting requirements (from llm-shared/languages/go.md):**
+
 - **Always run `goimports -w .` after changes** (NOT gofmt - goimports includes gofmt + import management)
 - **Always run `task build` before finishing** - includes tests, linting, and compilation
 - Install prerequisites: `go install golang.org/x/tools/cmd/goimports@latest`
 
 **Project-specific patterns:**
+
 - Use table-driven tests with `t.Parallel()` for concurrency
 - Define regex constants at package level (e.g., `RedditMatch`)
 - Structured logging with logrus (`log.Infof`, `log.Warnf`)
