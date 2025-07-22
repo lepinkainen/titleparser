@@ -16,16 +16,16 @@ This document provides essential guidelines for AI agents working on the `titlep
 The project uses `Taskfile.yml` for managing common development tasks.
 
 - **Building**:
-    - For AWS Lambda deployment: `task build` (creates a zip file in `build/`)
-    - For local testing: `task build-local`
+  - For AWS Lambda deployment: `task build` (creates a zip file in `build/`)
+  - For local testing: `task build-local`
 - **Testing**:
-    - Run all tests: `task test`
-    - Run a specific test: `go test -v ./handler -run TestSpecificFunctionName`
+  - Run all tests: `task test`
+  - Run a specific test: `go test -v ./handler -run TestSpecificFunctionName`
 - **Linting**: `task lint`
 - **Local Development**:
-    1. Build for local execution: `task build-local`
-    2. Run the local server: `RUNMODE=local ./titleparser`
-    3. Send requests to `http://localhost:8081/title`.
+  1. Build for local execution: `task build-local`
+  2. Run the local server: `RUNMODE=local ./titleparser`
+  3. Send requests to `http://localhost:8081/title`.
 
 ## Code Conventions
 
