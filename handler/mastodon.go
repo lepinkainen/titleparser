@@ -22,23 +22,23 @@ var MastodonMatch = ".*/@[^/]+/[0-9]+"
 
 // MastodonStatus represents a Mastodon status (post)
 type MastodonStatus struct {
-	ID          string    `json:"id"`
-	CreatedAt   time.Time `json:"created_at"`
-	Content     string    `json:"content"`
-	ReblogsCount int       `json:"reblogs_count"`
-	FavoritesCount int     `json:"favourites_count"`
-	RepliesCount int       `json:"replies_count"`
-	URL         string    `json:"url"`
-	Visibility  string    `json:"visibility"`
-	Language    string    `json:"language"`
-	Sensitive   bool      `json:"sensitive"`
-	Spoiler     string    `json:"spoiler_text"`
+	ID               string                    `json:"id"`
+	CreatedAt        time.Time                 `json:"created_at"`
+	Content          string                    `json:"content"`
+	ReblogsCount     int                       `json:"reblogs_count"`
+	FavoritesCount   int                       `json:"favourites_count"`
+	RepliesCount     int                       `json:"replies_count"`
+	URL              string                    `json:"url"`
+	Visibility       string                    `json:"visibility"`
+	Language         string                    `json:"language"`
+	Sensitive        bool                      `json:"sensitive"`
+	Spoiler          string                    `json:"spoiler_text"`
 	MediaAttachments []MastodonMediaAttachment `json:"media_attachments"`
-	Account     MastodonAccount `json:"account"`
-	Application MastodonApplication `json:"application"`
-	Mentions    []MastodonMention `json:"mentions"`
-	Tags        []MastodonTag `json:"tags"`
-	Card        *MastodonCard `json:"card"`
+	Account          MastodonAccount           `json:"account"`
+	Application      MastodonApplication       `json:"application"`
+	Mentions         []MastodonMention         `json:"mentions"`
+	Tags             []MastodonTag             `json:"tags"`
+	Card             *MastodonCard             `json:"card"`
 }
 
 // MastodonAccount represents a Mastodon user account
@@ -193,7 +193,7 @@ func Mastodon(url string) (string, error) {
 
 	// Process the content
 	content := stripHTML(status.Content)
-	
+
 	// Truncate content if too long
 	if len(content) > 100 {
 		content = content[:97] + "..."
@@ -207,9 +207,9 @@ func Mastodon(url string) (string, error) {
 	if status.Account.DisplayName != status.Account.Username {
 		title += fmt.Sprintf(" (@%s)", status.Account.Username)
 	}
-	
+
 	title += fmt.Sprintf(": %s", content)
-	
+
 	// Add engagement info
 	engagement := []string{}
 	if status.ReblogsCount > 0 {
@@ -221,7 +221,7 @@ func Mastodon(url string) (string, error) {
 	if status.RepliesCount > 0 {
 		engagement = append(engagement, fmt.Sprintf("%d replies", status.RepliesCount))
 	}
-	
+
 	// Add media info
 	mediaInfo := ""
 	if len(status.MediaAttachments) > 0 {
@@ -229,7 +229,7 @@ func Mastodon(url string) (string, error) {
 		for _, media := range status.MediaAttachments {
 			types[media.Type]++
 		}
-		
+
 		mediaLabels := []string{}
 		for mediaType, count := range types {
 			if count > 1 {
@@ -238,23 +238,23 @@ func Mastodon(url string) (string, error) {
 				mediaLabels = append(mediaLabels, mediaType)
 			}
 		}
-		
+
 		if len(mediaLabels) > 0 {
 			mediaInfo = strings.Join(mediaLabels, ", ")
 		}
 	}
-	
+
 	// Format the final title
 	if len(engagement) > 0 {
 		title += fmt.Sprintf(" [%s]", strings.Join(engagement, ", "))
 	}
-	
+
 	if mediaInfo != "" {
 		title += fmt.Sprintf(" [Media: %s]", mediaInfo)
 	}
-	
+
 	title += fmt.Sprintf(" [%s]", timestamp)
-	
+
 	// Add language if available and not default
 	if status.Language != "" && status.Language != "en" {
 		title += fmt.Sprintf(" [%s]", strings.ToUpper(status.Language))

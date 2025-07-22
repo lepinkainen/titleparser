@@ -18,12 +18,12 @@ func TestMastodonRegex(t *testing.T) {
 		{"https://fosstodon.org/@someuser/987654321", true},
 		{"https://hachyderm.io/@techuser/112233445566", true},
 		{"https://infosec.exchange/@securityperson/111222333", true},
-		
+
 		// Invalid URLs
-		{"https://mastodon.social/@username", false},  // No post ID
-		{"https://mastodon.social/users/username", false}, // Not /@username format
+		{"https://mastodon.social/@username", false},             // No post ID
+		{"https://mastodon.social/users/username", false},        // Not /@username format
 		{"https://twitter.com/username/status/123456789", false}, // Not Mastodon
-		{"https://mastodon.social/about", false}, // Not a post
+		{"https://mastodon.social/about", false},                 // Not a post
 	}
 
 	// Compile the regex once
@@ -42,12 +42,12 @@ func TestParseMastodonURL(t *testing.T) {
 	t.Parallel()
 
 	testCases := []struct {
-		name          string
-		url           string
-		wantInstance  string
-		wantUsername  string
-		wantStatusID  string
-		wantErr       bool
+		name         string
+		url          string
+		wantInstance string
+		wantUsername string
+		wantStatusID string
+		wantErr      bool
 	}{
 		{
 			name:         "Valid URL - mastodon.social",
@@ -66,20 +66,20 @@ func TestParseMastodonURL(t *testing.T) {
 			wantErr:      false,
 		},
 		{
-			name:          "Invalid URL - no status ID",
-			url:           "https://mastodon.social/@username",
-			wantInstance:  "",
-			wantUsername:  "",
-			wantStatusID:  "",
-			wantErr:       true,
+			name:         "Invalid URL - no status ID",
+			url:          "https://mastodon.social/@username",
+			wantInstance: "",
+			wantUsername: "",
+			wantStatusID: "",
+			wantErr:      true,
 		},
 		{
-			name:          "Invalid URL - not Mastodon format",
-			url:           "https://mastodon.social/users/username",
-			wantInstance:  "",
-			wantUsername:  "",
-			wantStatusID:  "",
-			wantErr:       true,
+			name:         "Invalid URL - not Mastodon format",
+			url:          "https://mastodon.social/users/username",
+			wantInstance: "",
+			wantUsername: "",
+			wantStatusID: "",
+			wantErr:      true,
 		},
 	}
 
@@ -87,23 +87,23 @@ func TestParseMastodonURL(t *testing.T) {
 		tc := tc // Capture range variable for parallel execution
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			
+
 			instance, username, statusID, err := parseMastodonURL(tc.url)
-			
+
 			if (err != nil) != tc.wantErr {
 				t.Errorf("parseMastodonURL() error = %v, wantErr %v", err, tc.wantErr)
 				return
 			}
-			
+
 			if !tc.wantErr {
 				if instance != tc.wantInstance {
 					t.Errorf("parseMastodonURL() instance = %v, want %v", instance, tc.wantInstance)
 				}
-				
+
 				if username != tc.wantUsername {
 					t.Errorf("parseMastodonURL() username = %v, want %v", username, tc.wantUsername)
 				}
-				
+
 				if statusID != tc.wantStatusID {
 					t.Errorf("parseMastodonURL() statusID = %v, want %v", statusID, tc.wantStatusID)
 				}
@@ -151,9 +151,9 @@ func TestStripHTML(t *testing.T) {
 		tc := tc // Capture range variable for parallel execution
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			
+
 			result := stripHTML(tc.html)
-			
+
 			if result != tc.expected {
 				t.Errorf("stripHTML() = %q, want %q", result, tc.expected)
 			}
@@ -190,9 +190,9 @@ func TestExtractOpenGraphTitle(t *testing.T) {
 		tc := tc // Capture range variable for parallel execution
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			
+
 			result := extractOpenGraphTitle(tc.html)
-			
+
 			if result != tc.expected {
 				t.Errorf("extractOpenGraphTitle() = %q, want %q", result, tc.expected)
 			}
@@ -229,9 +229,9 @@ func TestExtractTitle(t *testing.T) {
 		tc := tc // Capture range variable for parallel execution
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			
+
 			result := extractTitle(tc.html)
-			
+
 			if result != tc.expected {
 				t.Errorf("extractTitle() = %q, want %q", result, tc.expected)
 			}
