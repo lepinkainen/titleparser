@@ -38,7 +38,20 @@ task build-local          # Creates native binary 'titleparser'
 RUNMODE=local ./titleparser  # Starts HTTP server on localhost:8081
 ```
 
-**2. Test the title parsing endpoint:**
+**2. Test with stdin mode (fastest for development):**
+
+```bash
+# Simple URL test:
+echo '{"url":"https://example.com"}' | RUNMODE=stdin ./titleparser
+
+# Test custom handler (Reddit):
+echo '{"url":"https://reddit.com/r/golang/comments/123/test"}' | RUNMODE=stdin ./titleparser
+
+# From file:
+cat test-query.json | RUNMODE=stdin ./titleparser
+```
+
+**3. Test the HTTP server endpoint:**
 
 ```bash
 # Using httpie:
@@ -50,7 +63,7 @@ curl -X POST http://localhost:8081/title \
   -d '{"url": "http://reddit.com/r/golang/comments/123/test"}'
 ```
 
-**3. Available endpoints:**
+**4. Available endpoints (HTTP server mode):**
 
 - `POST /title` - Main title parsing (same JSON format as Lambda)
 - `GET /hi` - Simple health check
@@ -58,8 +71,9 @@ curl -X POST http://localhost:8081/title \
 
 **Local mode differences:**
 
-- No DynamoDB caching (results not stored)
-- HTTP server instead of Lambda runtime
+- **RUNMODE=stdin**: Reads JSON from stdin, outputs to stdout, then exits (fastest for testing)
+- **RUNMODE=local**: Starts HTTP server on localhost:8081 for interactive testing
+- Both modes skip DynamoDB caching (results not stored)
 - All custom handlers work identically to production
 
 ## Handler Registration Pattern

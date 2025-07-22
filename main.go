@@ -23,8 +23,35 @@ func main() {
 	// TODO: Make port configurable
 
 	var runmode = os.Getenv("RUNMODE")
-	if runmode != "local" {
+	if runmode != "local" && runmode != "stdin" {
 		awslambda.Start(lambda.HandleRequest)
+		os.Exit(0)
+	}
+
+	if runmode == "stdin" {
+		fmt.Println("Running in stdin mode")
+
+		decoder := json.NewDecoder(os.Stdin)
+		var query lambda.TitleQuery
+		err := decoder.Decode(&query)
+		if err != nil {
+			log.Errorf("Error decoding JSON from stdin: %v", err)
+			os.Exit(1)
+		}
+
+		res, err := lambda.HandleRequest(context.Background(), query)
+		if err != nil {
+			log.Errorf("Error handling request: %v", err)
+			os.Exit(1)
+		}
+
+		output, err := json.Marshal(res)
+		if err != nil {
+			log.Errorf("Error marshaling response JSON: %v", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(string(output))
 		os.Exit(0)
 	}
 
