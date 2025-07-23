@@ -13,7 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var RedditMatch = `.*reddit\.com/r/.*/comments/.*/.*`
+var RedditMatch = `.*reddit\.com/r/.*/comments/.*/.*|.*v\.redd\.it/.*`
 
 type RedditPost []struct {
 	Kind string `json:"kind"`
@@ -193,7 +193,57 @@ type RedditPost []struct {
 	} `json:"data"`
 }
 
+// followRedirects follows HTTP redirects from v.redd.it URLs to get the final Reddit post URL
+func followRedirects(url string) (string, error) {
+	client := &http.Client{
+		Timeout: time.Second * 10,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			// Stop after 10 redirects to prevent loops
+			if len(via) >= 10 {
+				return fmt.Errorf("too many redirects (>10)")
+			}
+			return nil
+		},
+	}
+
+	// Set proper headers to avoid blocking
+	req, err := http.NewRequest("HEAD", url, nil)
+	if err != nil {
+		return "", fmt.Errorf("error creating request: %v", err)
+	}
+
+	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("Accept-Language", AcceptLanguage)
+	req.Header.Set("Accept", Accept)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("error following redirects: %v", err)
+	}
+	defer resp.Body.Close()
+
+	finalURL := resp.Request.URL.String()
+
+	// Verify we ended up with a Reddit post URL
+	if !strings.Contains(finalURL, "reddit.com/r/") || !strings.Contains(finalURL, "/comments/") {
+		return "", fmt.Errorf("redirect did not lead to valid Reddit post URL: %s", finalURL)
+	}
+
+	return finalURL, nil
+}
+
 func Reddit(url string) (string, error) {
+	// Handle v.redd.it URLs by following redirects to get actual Reddit post URL
+	if strings.Contains(url, "v.redd.it") {
+		finalURL, err := followRedirects(url)
+		if err != nil {
+			log.Warnf("Failed to follow redirects for v.redd.it URL %s: %v", url, err)
+			return "", fmt.Errorf("failed to follow v.redd.it redirects: %v", err)
+		}
+		url = finalURL
+		log.Infof("v.redd.it URL %s redirected to %s", url, finalURL)
+	}
+
 	if strings.HasSuffix(url, "/") {
 		url = fmt.Sprintf("%s.json", url)
 	} else {

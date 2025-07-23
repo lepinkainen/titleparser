@@ -24,6 +24,7 @@ func TestReddit(t *testing.T) {
 		{"Basic post 3", args{url: "https://www.reddit.com/r/MandelaEffect/comments/1ah7asy/i_think_i_figured_out_the_criminal_emoji_mandela/"}, `I think I figured out the criminal emoji Mandela effect.`, false, ""},
 		{"Gfycat post", args{url: "https://www.reddit.com/r/GifRecipes/comments/naqcu4/321_method_bbq_ribs/"}, `3-2-1 Method BBQ Ribs`, false, ""},
 		{"Nextfuckinglevel post", args{url: "https://www.reddit.com/r/nextfuckinglevel/comments/1j8vcog/finnish_freediver_olavi_paananen_broke_the_world/"}, `Finnish freediver olavi paananen, broke the world record diving 107 meters under the ice without flippers and wearing only swimming shorts`, false, ""},
+		{"v.redd.it URL (example from issue)", args{url: "https://v.redd.it/y2nzxxnihlf61"}, `Only known video recording of the formation of a crop circle, including visible UFOs \(1996\)\.`, false, ""},
 	}
 	for _, tt := range tests {
 		tt := tt
@@ -54,6 +55,33 @@ func TestReddit(t *testing.T) {
 			match, err := regexp.MatchString(RedditMatch, tt.args.url)
 			if err != nil || !match {
 				t.Errorf("Reddit() URL didn't match regex")
+			}
+		})
+	}
+}
+
+func TestRedditMatch(t *testing.T) {
+	tests := []struct {
+		name string
+		url  string
+		want bool
+	}{
+		{"Regular Reddit post", "https://www.reddit.com/r/funny/comments/np9b9b/for_those_having_trouble_finding_it/", true},
+		{"v.redd.it URL", "https://v.redd.it/y2nzxxnihlf61", true},
+		{"v.redd.it URL with longer ID", "https://v.redd.it/abc123def456ghi", true},
+		{"Non-Reddit URL", "https://example.com", false},
+		{"Reddit but not comments", "https://www.reddit.com/r/funny/", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			match, err := regexp.MatchString(RedditMatch, tt.url)
+			if err != nil {
+				t.Errorf("RedditMatch regex error: %v", err)
+				return
+			}
+			if match != tt.want {
+				t.Errorf("RedditMatch(%v) = %v, want %v", tt.url, match, tt.want)
 			}
 		})
 	}
