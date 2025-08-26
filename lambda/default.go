@@ -50,7 +50,11 @@ func DefaultHandler(url string) (string, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	// Not html, don't bother parsing
 	contentType := res.Header.Get("content-type")
@@ -59,21 +63,23 @@ func DefaultHandler(url string) (string, error) {
 	}
 
 	if res.StatusCode != 200 {
-		if res.StatusCode == 403 {
+		switch res.StatusCode {
+		case 403:
 			return "", errors.New("403 Forbidden")
-		} else if res.StatusCode == 404 {
+		case 404:
 			return "", errors.New("404 Not Found")
-		} else if res.StatusCode == 405 {
+		case 405:
 			return "", errors.New("405 Method Not Allowed")
-		} else if res.StatusCode == 429 {
+		case 429:
 			return "", errors.New("429 Too Many Requests")
-		} else if res.StatusCode == 500 {
+		case 500:
 			return "", errors.New("500 Internal Server Error")
-		} else if res.StatusCode == 502 {
+		case 502:
 			return "", errors.New("502 Bad Gateway")
+		default:
+			log.Fatalf("unhandled status code: %d (%s)", res.StatusCode, res.Status)
+			return "", errors.Wrap(err, "HTTP error")
 		}
-		log.Fatalf("unhandled status code: %d (%s)", res.StatusCode, res.Status)
-		return "", errors.Wrap(err, "HTTP error")
 	}
 
 	// Load the HTML document
@@ -133,21 +139,23 @@ func ParseHTMLFromResponse(res *http.Response, url string) (string, error) {
 	}
 
 	if res.StatusCode != 200 {
-		if res.StatusCode == 403 {
+		switch res.StatusCode {
+		case 403:
 			return "", errors.New("403 Forbidden")
-		} else if res.StatusCode == 404 {
+		case 404:
 			return "", errors.New("404 Not Found")
-		} else if res.StatusCode == 405 {
+		case 405:
 			return "", errors.New("405 Method Not Allowed")
-		} else if res.StatusCode == 429 {
+		case 429:
 			return "", errors.New("429 Too Many Requests")
-		} else if res.StatusCode == 500 {
+		case 500:
 			return "", errors.New("500 Internal Server Error")
-		} else if res.StatusCode == 502 {
+		case 502:
 			return "", errors.New("502 Bad Gateway")
+		default:
+			log.Errorf("unhandled status code: %d (%s) for URL: %s", res.StatusCode, res.Status, url)
+			return "", fmt.Errorf("HTTP error: %d %s", res.StatusCode, res.Status)
 		}
-		log.Errorf("unhandled status code: %d (%s) for URL: %s", res.StatusCode, res.Status, url)
-		return "", fmt.Errorf("HTTP error: %d %s", res.StatusCode, res.Status)
 	}
 
 	// Load the HTML document

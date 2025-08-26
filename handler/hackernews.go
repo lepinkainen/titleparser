@@ -61,7 +61,11 @@ func HackerNews(url string) (string, error) {
 	if err != nil {
 		log.Fatal("Error reading response. ", err)
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	var apiResponse HNAPIResponse
 

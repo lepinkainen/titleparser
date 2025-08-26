@@ -169,7 +169,11 @@ func handleVideoURL(videoID, apiKey string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "Error querying YouTube video API")
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	if res.StatusCode != 200 {
 		bytes, _ := io.ReadAll(res.Body)
@@ -240,7 +244,11 @@ func handleChannelURL(channelID, paramType, apiKey string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "Error querying YouTube channel API")
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	if res.StatusCode != 200 {
 		bytes, _ := io.ReadAll(res.Body)

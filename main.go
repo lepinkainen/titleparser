@@ -58,11 +58,15 @@ func main() {
 	fmt.Println("Running in local mode")
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+		if _, err := fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path)); err != nil {
+			log.Warnf("Failed to write response: %v", err)
+		}
 	})
 
 	http.HandleFunc("/hi", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hi")
+		if _, err := fmt.Fprintf(w, "Hi"); err != nil {
+			log.Warnf("Failed to write response: %v", err)
+		}
 	})
 
 	/*
@@ -94,7 +98,9 @@ func main() {
 			_ = fmt.Errorf("error marshaling response JSON: %#v", err)
 		}
 
-		fmt.Fprint(w, string(q))
+		if _, err := fmt.Fprint(w, string(q)); err != nil {
+			log.Warnf("Failed to write response: %v", err)
+		}
 	})
 
 	log.Fatal(http.ListenAndServe("127.0.0.1:8081", nil))

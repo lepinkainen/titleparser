@@ -17,7 +17,11 @@ func Verkkokauppa(url string) (string, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 	if res.StatusCode != 200 {
 		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
 		return "", errors.Wrap(err, "HTTP error")

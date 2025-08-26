@@ -27,7 +27,11 @@ func YleAreena(url string) (string, error) {
 		log.Error(err)
 		return "", errors.Wrap(err, "Could not load HTML")
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	// Load the HTML document
 	doc, err := goquery.NewDocumentFromReader(res.Body)

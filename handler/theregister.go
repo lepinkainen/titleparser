@@ -33,7 +33,11 @@ func TheRegister(url string) (string, error) {
 		log.Errorf("Error sending request to %s: %v", url, err)
 		return "", err
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	log.Infof("The Register response status: %d for %s", res.StatusCode, url)
 

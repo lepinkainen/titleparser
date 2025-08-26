@@ -27,6 +27,7 @@ tasks:
     deps:
       - clean
       - test
+      - lint
     cmds:
       - env GOOS=linux GOARCH=arm64 go build -ldflags="-X main.Version={{.GIT_COMMIT}}" -o {{.BUILDDIR}}/bootstrap
       - cd {{.BUILDDIR}} && zip {{.FUNCNAME}}.zip bootstrap
@@ -70,7 +71,7 @@ tasks:
     silent: true # to ignore errors but keep the output
 
   publish:
-    deps: [lint, build]
+    deps: [build]
     cmds:
       - aws lambda update-function-code --publish --function-name {{.FUNCNAME}} --zip-file fileb://{{.BUILDDIR}}/{{.FUNCNAME}}.zip
       - task: verify-deployment

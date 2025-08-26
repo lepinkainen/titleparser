@@ -145,7 +145,11 @@ func fetchStatusInfo(instance, statusID string) (*MastodonStatus, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "error sending request")
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	// Check if the request was successful
 	if res.StatusCode != http.StatusOK {
@@ -286,7 +290,11 @@ func fallbackToScraping(url string) (string, error) {
 		log.Error("Error sending request: ", err)
 		return "", err
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	// Read the response body
 	body, err := io.ReadAll(res.Body)

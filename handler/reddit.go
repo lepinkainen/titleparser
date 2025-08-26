@@ -220,7 +220,11 @@ func followRedirects(url string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("error following redirects: %v", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	finalURL := resp.Request.URL.String()
 
@@ -268,7 +272,11 @@ func Reddit(url string) (string, error) {
 	if err != nil {
 		log.Fatal("Error reading response. ", err)
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Warnf("Failed to close response body: %v", err)
+		}
+	}()
 
 	// Check the content type to see if we got JSON or HTML
 	contentType := res.Header.Get("Content-Type")
