@@ -1,6 +1,9 @@
 package handler
 
-import "testing"
+import (
+	"regexp"
+	"testing"
+)
 
 // TODO: Make test use golden files instead of online testing
 func TestOMDB(t *testing.T) {
@@ -12,37 +15,36 @@ func TestOMDB(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    string
+		want    *regexp.Regexp
 		wantErr bool
 	}{
 		{"The Matrix - movie",
 			args{url: "https://www.imdb.com/title/tt0133093/"},
-			"The Matrix (1999) [IMDb 8.7/10] [RT 83%] [Meta 73/100]",
+			regexp.MustCompile(`^The Matrix \(1999\) \[IMDb \d\.\d/10\] \[RT \d+%\] \[Meta \d+/100\]$`),
 			false},
 		{"LOTR - movie - ref",
 			args{url: "https://www.imdb.com/title/tt0120737/?ref_=fn_al_tt_1"},
-			"The Lord of the Rings: The Fellowship of the Ring (2001) [IMDb 8.9/10] [RT 92%] [Meta 92/100]",
+			regexp.MustCompile(`^The Lord of the Rings: The Fellowship of the Ring \(2001\) \[IMDb \d\.\d/10\] \[RT \d+%\] \[Meta \d+/100\]$`),
 			false},
 		{"MacGyver - TV",
 			args{url: "https://www.imdb.com/title/tt0088559/"},
-			"MacGyver (1985–1992) [IMDb 7.6/10] [RT N/A] [Meta N/A]",
+			regexp.MustCompile(`^MacGyver \(1985.1992\) \[IMDb \d\.\d/10\] \[RT (N/A|\d+%)\] \[Meta (N/A|\d+/100)\]$`),
 			false},
 		{"No ID in URL",
 			args{url: "https://www.imdb.com/"},
-			"",
+			nil,
 			true},
 		{"Megaforce - movie",
 			args{url: "https://www.imdb.com/title/tt0084316/"},
-			"Megaforce (1982) [IMDb 3.7/10] [RT 6%] [Meta 18/100]",
+			regexp.MustCompile(`^Megaforce \(1982\) \[IMDb \d\.\d/10\] \[RT \d+%\] \[Meta \d+/100\]$`),
 			false},
 		{"The Matrix - movie - no ending slash",
 			args{url: "https://www.imdb.com/title/tt0133093"},
-			"The Matrix (1999) [IMDb 8.7/10] [RT 83%] [Meta 73/100]",
+			regexp.MustCompile(`^The Matrix \(1999\) \[IMDb \d\.\d/10\] \[RT \d+%\] \[Meta \d+/100\]$`),
 			false},
-		{"Wrong URL", args{url: "http://mantta.fi"}, "", true},
+		{"Wrong URL", args{url: "http://mantta.fi"}, nil, true},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			got, err := OMDB(tt.args.url)
@@ -50,8 +52,11 @@ func TestOMDB(t *testing.T) {
 				t.Errorf("OMDB() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.want {
-				t.Errorf("OMDB() = %v, want %v", got, tt.want)
+			if tt.wantErr {
+				return
+			}
+			if !tt.want.MatchString(got) {
+				t.Errorf("OMDB() = %v, want match %v", got, tt.want)
 			}
 		})
 	}
