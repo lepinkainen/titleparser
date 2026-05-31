@@ -1,0 +1,74 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  enable:
+    - govet
+    - errcheck
+    - staticcheck
+    - unused
+    - ineffassign
+    - misspell
+    - gocritic
+    - revive
+  exclusions:
+    paths:
+      - llm-shared
+    rules:
+      - path: _test\.go
+        linters:
+          - gosec
+      - path: llm-shared/
+        linters:
+          - gocritic
+          - revive
+  settings:
+    govet:
+      disable:
+        - shadow
+    errcheck:
+      exclude-functions:
+        - (io.Closer).Close
+        - (*net/http.Response).Body.Close
+        - os.Setenv
+        - os.Unsetenv
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - experimental
+        - opinionated
+        - performance
+        - style
+      disabled-checks:
+        - exitAfterDefer
+        - rangeValCopy
+        - hugeParam
+        - ifElseChain
+        - paramTypeCombine
+        - unnamedResult
+        - singleCaseSwitch
+        - importShadow
+        - commentFormatting
+        - regexpSimplify
+        - httpNoBody
+        - assignOp
+        - commentedOutCode
+    revive:
+      severity: warning
+      rules:
+        - name: package-comments
+          disabled: true
+        - name: exported
+          disabled: true
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
