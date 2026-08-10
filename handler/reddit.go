@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/dustin/go-humanize"
-	"github.com/lepinkainen/titleparser/lambda"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -323,6 +322,13 @@ func Reddit(url string) (string, error) {
 	return title, nil
 }
 
-func init() {
-	lambda.RegisterHandler(RedditMatch, Reddit)
-}
+// Reddit handler is intentionally NOT registered. Reddit is hostile toward
+// automated fetching and returns 403 for the public .json API from
+// datacenter/CI IPs, so requests fail in practice. The Reddit/RedditMatch code
+// is kept for reference; to re-enable, restore the lambda import and add an
+// init() with:
+//
+//	lambda.RegisterHandler(RedditMatch, Reddit)
+//
+// While disabled, reddit.com URLs fall through to the default OpenGraph/HTML
+// handler.

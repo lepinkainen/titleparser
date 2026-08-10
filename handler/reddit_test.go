@@ -9,6 +9,8 @@ import (
 )
 
 func TestReddit(t *testing.T) {
+	t.Skip("Reddit handler disabled: Reddit blocks automated fetching (403 from datacenter/CI IPs)")
+
 	type args struct {
 		url string
 	}
