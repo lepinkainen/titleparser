@@ -1,6 +1,6 @@
 module github.com/lepinkainen/titleparser
 
-go 1.24
+go 1.26.1
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
