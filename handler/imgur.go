@@ -32,51 +32,51 @@ var (
 // ImgurResponse is the imgur generic API response for all gallery queries
 type ImgurResponse struct {
 	Data struct {
-		ID            string      `json:"id"`
-		Title         string      `json:"title"`
-		Description   interface{} `json:"description"`
-		Datetime      int         `json:"datetime"`
-		Cover         string      `json:"cover"`
-		CoverWidth    int         `json:"cover_width"`
-		CoverHeight   int         `json:"cover_height"`
-		AccountURL    string      `json:"account_url"`
-		AccountID     int         `json:"account_id"`
-		Privacy       string      `json:"privacy"`
-		Layout        string      `json:"layout"`
-		Views         int         `json:"views"`
-		Link          string      `json:"link"`
-		Ups           int         `json:"ups"`
-		Downs         int         `json:"downs"`
-		Points        int         `json:"points"`
-		Score         int         `json:"score"`
-		IsAlbum       bool        `json:"is_album"`
-		Vote          interface{} `json:"vote"`
-		Favorite      bool        `json:"favorite"`
-		Nsfw          bool        `json:"nsfw"`
-		Section       string      `json:"section"`
-		CommentCount  int         `json:"comment_count"`
-		FavoriteCount int         `json:"favorite_count"`
-		Topic         string      `json:"topic"`
-		TopicID       int         `json:"topic_id"`
-		ImagesCount   int         `json:"images_count"`
-		InGallery     bool        `json:"in_gallery"`
-		IsAd          bool        `json:"is_ad"`
+		ID            string `json:"id"`
+		Title         string `json:"title"`
+		Description   any    `json:"description"`
+		Datetime      int    `json:"datetime"`
+		Cover         string `json:"cover"`
+		CoverWidth    int    `json:"cover_width"`
+		CoverHeight   int    `json:"cover_height"`
+		AccountURL    string `json:"account_url"`
+		AccountID     int    `json:"account_id"`
+		Privacy       string `json:"privacy"`
+		Layout        string `json:"layout"`
+		Views         int    `json:"views"`
+		Link          string `json:"link"`
+		Ups           int    `json:"ups"`
+		Downs         int    `json:"downs"`
+		Points        int    `json:"points"`
+		Score         int    `json:"score"`
+		IsAlbum       bool   `json:"is_album"`
+		Vote          any    `json:"vote"`
+		Favorite      bool   `json:"favorite"`
+		Nsfw          bool   `json:"nsfw"`
+		Section       string `json:"section"`
+		CommentCount  int    `json:"comment_count"`
+		FavoriteCount int    `json:"favorite_count"`
+		Topic         string `json:"topic"`
+		TopicID       int    `json:"topic_id"`
+		ImagesCount   int    `json:"images_count"`
+		InGallery     bool   `json:"in_gallery"`
+		IsAd          bool   `json:"is_ad"`
 		Tags          []struct {
-			Name                   string      `json:"name"`
-			DisplayName            string      `json:"display_name"`
-			Followers              int         `json:"followers"`
-			TotalItems             int         `json:"total_items"`
-			Following              bool        `json:"following"`
-			IsWhitelisted          bool        `json:"is_whitelisted"`
-			BackgroundHash         string      `json:"background_hash"`
-			ThumbnailHash          interface{} `json:"thumbnail_hash"`
-			Accent                 string      `json:"accent"`
-			BackgroundIsAnimated   bool        `json:"background_is_animated"`
-			ThumbnailIsAnimated    bool        `json:"thumbnail_is_animated"`
-			IsPromoted             bool        `json:"is_promoted"`
-			Description            string      `json:"description"`
-			LogoHash               interface{} `json:"logo_hash"`
-			LogoDestinationURL     interface{} `json:"logo_destination_url"`
+			Name                   string `json:"name"`
+			DisplayName            string `json:"display_name"`
+			Followers              int    `json:"followers"`
+			TotalItems             int    `json:"total_items"`
+			Following              bool   `json:"following"`
+			IsWhitelisted          bool   `json:"is_whitelisted"`
+			BackgroundHash         string `json:"background_hash"`
+			ThumbnailHash          any    `json:"thumbnail_hash"`
+			Accent                 string `json:"accent"`
+			BackgroundIsAnimated   bool   `json:"background_is_animated"`
+			ThumbnailIsAnimated    bool   `json:"thumbnail_is_animated"`
+			IsPromoted             bool   `json:"is_promoted"`
+			Description            string `json:"description"`
+			LogoHash               any    `json:"logo_hash"`
+			LogoDestinationURL     any    `json:"logo_destination_url"`
 			DescriptionAnnotations struct {
 			} `json:"description_annotations"`
 		} `json:"tags"`
@@ -85,45 +85,45 @@ type ImgurResponse struct {
 		InMostViral     bool   `json:"in_most_viral"`
 		IncludeAlbumAds bool   `json:"include_album_ads"`
 		Images          []struct {
-			ID            string        `json:"id"`
-			Title         interface{}   `json:"title"`
-			Description   interface{}   `json:"description"`
-			Datetime      int           `json:"datetime"`
-			Type          string        `json:"type"`
-			Animated      bool          `json:"animated"`
-			Width         int           `json:"width"`
-			Height        int           `json:"height"`
-			Size          int           `json:"size"`
-			Views         int           `json:"views"`
-			Bandwidth     int64         `json:"bandwidth"`
-			Vote          interface{}   `json:"vote"`
-			Favorite      bool          `json:"favorite"`
-			Nsfw          interface{}   `json:"nsfw"`
-			Section       interface{}   `json:"section"`
-			AccountURL    interface{}   `json:"account_url"`
-			AccountID     interface{}   `json:"account_id"`
-			IsAd          bool          `json:"is_ad"`
-			InMostViral   bool          `json:"in_most_viral"`
-			HasSound      bool          `json:"has_sound"`
-			Tags          []interface{} `json:"tags"`
-			AdType        int           `json:"ad_type"`
-			AdURL         string        `json:"ad_url"`
-			Edited        string        `json:"edited"`
-			InGallery     bool          `json:"in_gallery"`
-			Link          string        `json:"link"`
-			CommentCount  interface{}   `json:"comment_count"`
-			FavoriteCount interface{}   `json:"favorite_count"`
-			Ups           interface{}   `json:"ups"`
-			Downs         interface{}   `json:"downs"`
-			Points        interface{}   `json:"points"`
-			Score         interface{}   `json:"score"`
+			ID            string `json:"id"`
+			Title         any    `json:"title"`
+			Description   any    `json:"description"`
+			Datetime      int    `json:"datetime"`
+			Type          string `json:"type"`
+			Animated      bool   `json:"animated"`
+			Width         int    `json:"width"`
+			Height        int    `json:"height"`
+			Size          int    `json:"size"`
+			Views         int    `json:"views"`
+			Bandwidth     int64  `json:"bandwidth"`
+			Vote          any    `json:"vote"`
+			Favorite      bool   `json:"favorite"`
+			Nsfw          any    `json:"nsfw"`
+			Section       any    `json:"section"`
+			AccountURL    any    `json:"account_url"`
+			AccountID     any    `json:"account_id"`
+			IsAd          bool   `json:"is_ad"`
+			InMostViral   bool   `json:"in_most_viral"`
+			HasSound      bool   `json:"has_sound"`
+			Tags          []any  `json:"tags"`
+			AdType        int    `json:"ad_type"`
+			AdURL         string `json:"ad_url"`
+			Edited        string `json:"edited"`
+			InGallery     bool   `json:"in_gallery"`
+			Link          string `json:"link"`
+			CommentCount  any    `json:"comment_count"`
+			FavoriteCount any    `json:"favorite_count"`
+			Ups           any    `json:"ups"`
+			Downs         any    `json:"downs"`
+			Points        any    `json:"points"`
+			Score         any    `json:"score"`
 		} `json:"images"`
 		AdConfig struct {
-			SafeFlags       []string      `json:"safeFlags"`
-			HighRiskFlags   []interface{} `json:"highRiskFlags"`
-			UnsafeFlags     []interface{} `json:"unsafeFlags"`
-			WallUnsafeFlags []interface{} `json:"wallUnsafeFlags"`
-			ShowsAds        bool          `json:"showsAds"`
+			SafeFlags       []string `json:"safeFlags"`
+			HighRiskFlags   []any    `json:"highRiskFlags"`
+			UnsafeFlags     []any    `json:"unsafeFlags"`
+			WallUnsafeFlags []any    `json:"wallUnsafeFlags"`
+			ShowsAds        bool     `json:"showsAds"`
 		} `json:"ad_config"`
 	} `json:"data"`
 	Success bool `json:"success"`
@@ -163,7 +163,7 @@ func getAPIResponse(category, id string) (ImgurResponse, error) {
 }
 
 // https://api.imgur.com/models/gallery_album
-func imgurGallery(url, id string) (string, error) {
+func imgurGallery(id string) (string, error) {
 	apiResponse, err := getAPIResponse("gallery", id)
 	if err != nil {
 		return "", err
@@ -186,7 +186,7 @@ func imgurGallery(url, id string) (string, error) {
 
 // Just a normal album, not in the public gallery(?)
 // https://api.imgur.com/models/album
-func imgurAlbum(url, id string) (string, error) {
+func imgurAlbum(id string) (string, error) {
 	apiResponse, err := getAPIResponse("album", id)
 	if err != nil {
 		return "", err
@@ -209,7 +209,7 @@ func imgurAlbum(url, id string) (string, error) {
 
 // Subreddit images have a special gallery for each "section"
 // Returns: title [/r/subreddit]
-func subredditImage(url, section, id string) (string, error) {
+func subredditImage(section, id string) (string, error) {
 	apiResponse, err := getAPIResponse(fmt.Sprintf("gallery/r/%s", section), id)
 	if err != nil {
 		return "", err
@@ -233,7 +233,7 @@ func subredditImage(url, section, id string) (string, error) {
 
 // Subreddit images have a special gallery for each "section"
 // Returns: title [/r/subreddit]
-func tagImage(url, section, id string) (string, error) {
+func tagImage(section, id string) (string, error) {
 	apiResponse, err := getAPIResponse(fmt.Sprintf("gallery/t/%s", section), id)
 	if err != nil {
 		return "", err
@@ -256,7 +256,7 @@ func tagImage(url, section, id string) (string, error) {
 
 // Image page link
 // Returns: title [tags: 1, 2, 3]
-func imgurImage(url, id string) (string, error) {
+func imgurImage(id string) (string, error) {
 	apiResponse, err := getAPIResponse("image", id)
 	if err != nil {
 		return "", err
@@ -266,7 +266,7 @@ func imgurImage(url, id string) (string, error) {
 
 	// No title, but section exists -> subreddit gallery image
 	if title == "" && apiResponse.Data.Section != "" {
-		return subredditImage(url, apiResponse.Data.Section, id)
+		return subredditImage(apiResponse.Data.Section, id)
 	}
 
 	if len(apiResponse.Data.Tags) > 0 {
@@ -285,22 +285,22 @@ func Imgur(url string) (string, error) {
 
 	match := galleryRegex.FindStringSubmatch(url)
 	if len(match) > 0 {
-		return imgurGallery(url, match[1])
+		return imgurGallery(match[1])
 	}
 
 	match = albumRegex.FindStringSubmatch(url)
 	if len(match) > 0 {
-		return imgurAlbum(url, match[1])
+		return imgurAlbum(match[1])
 	}
 
 	match = tagRegex.FindStringSubmatch(url)
 	if len(match) > 0 {
-		return tagImage(url, match[1], match[2])
+		return tagImage(match[1], match[2])
 	}
 
 	match = imageRegex.FindStringSubmatch(url)
 	if len(match) > 0 {
-		return imgurImage(url, match[1])
+		return imgurImage(match[1])
 	}
 
 	// Direct image links don't seem to have title information
