@@ -170,8 +170,8 @@ func handleVideoURL(videoID, apiKey string) (string, error) {
 		return "", errors.Wrap(err, "Error querying YouTube video API")
 	}
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			log.Warnf("Failed to close response body: %v", err)
+		if cerr := res.Body.Close(); cerr != nil {
+			log.Warnf("Failed to close response body: %v", cerr)
 		}
 	}()
 
@@ -187,8 +187,8 @@ func handleVideoURL(videoID, apiKey string) (string, error) {
 	}
 
 	var reply YoutubeReply
-	if err := json.Unmarshal(bytes, &reply); err != nil {
-		return "", errors.Wrap(err, "Failed to parse video API response")
+	if unmarshalErr := json.Unmarshal(bytes, &reply); unmarshalErr != nil {
+		return "", errors.Wrap(unmarshalErr, "Failed to parse video API response")
 	}
 
 	if len(reply.Items) == 0 {
@@ -245,8 +245,8 @@ func handleChannelURL(channelID, paramType, apiKey string) (string, error) {
 		return "", errors.Wrap(err, "Error querying YouTube channel API")
 	}
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			log.Warnf("Failed to close response body: %v", err)
+		if cerr := res.Body.Close(); cerr != nil {
+			log.Warnf("Failed to close response body: %v", cerr)
 		}
 	}()
 
@@ -262,8 +262,8 @@ func handleChannelURL(channelID, paramType, apiKey string) (string, error) {
 	}
 
 	var reply YoutubeChannelReply
-	if err := json.Unmarshal(bytes, &reply); err != nil {
-		return "", errors.Wrap(err, "Failed to parse channel API response")
+	if unmarshalErr := json.Unmarshal(bytes, &reply); unmarshalErr != nil {
+		return "", errors.Wrap(unmarshalErr, "Failed to parse channel API response")
 	}
 
 	if len(reply.Items) == 0 {

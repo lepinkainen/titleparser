@@ -14,6 +14,16 @@ linters:
     - misspell
     - gocritic
     - revive
+    - errorlint
+    - bodyclose
+    - sqlclosecheck
+    - gosec
+    - unparam
+    - gocyclo
+    # noctx + contextcheck disabled until context is threaded through
+    # handlers + cache — tracked in https://github.com/lepinkainen/titleparser/issues/760
+    # - noctx
+    # - contextcheck
   exclusions:
     paths:
       - llm-shared
@@ -27,8 +37,16 @@ linters:
           - revive
   settings:
     govet:
-      disable:
+      enable:
         - shadow
+    gocyclo:
+      min-complexity: 18
+    gosec:
+      excludes:
+        # SSRF on caller-supplied URLs is the whole point of a titleparser —
+        # it fetches arbitrary user URLs by design.
+        - G107 # http request with variable URL
+        - G704 # taint-tracked SSRF
     errcheck:
       exclude-functions:
         - (io.Closer).Close

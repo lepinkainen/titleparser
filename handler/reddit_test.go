@@ -48,8 +48,8 @@ func TestReddit(t *testing.T) {
 
 			// If no error, check the content
 			if err == nil {
-				match, err := regexp.MatchString(tt.want, got)
-				if err != nil || !match {
+				match, matchErr := regexp.MatchString(tt.want, got)
+				if matchErr != nil || !match {
 					t.Errorf("Reddit() = '%v', want '%v'", got, tt.want)
 				}
 			}

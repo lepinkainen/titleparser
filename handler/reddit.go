@@ -208,7 +208,7 @@ func followRedirects(url string) (string, error) {
 	// Set proper headers to avoid blocking
 	req, err := http.NewRequest("HEAD", url, nil)
 	if err != nil {
-		return "", fmt.Errorf("error creating request: %v", err)
+		return "", fmt.Errorf("error creating request: %w", err)
 	}
 
 	req.Header.Set("User-Agent", UserAgent)
@@ -217,7 +217,7 @@ func followRedirects(url string) (string, error) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("error following redirects: %v", err)
+		return "", fmt.Errorf("error following redirects: %w", err)
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
@@ -241,7 +241,7 @@ func Reddit(url string) (string, error) {
 		finalURL, err := followRedirects(url)
 		if err != nil {
 			log.Warnf("Failed to follow redirects for v.redd.it URL %s: %v", url, err)
-			return "", fmt.Errorf("failed to follow v.redd.it redirects: %v", err)
+			return "", fmt.Errorf("failed to follow v.redd.it redirects: %w", err)
 		}
 		url = finalURL
 		log.Infof("v.redd.it URL %s redirected to %s", url, finalURL)
@@ -272,8 +272,8 @@ func Reddit(url string) (string, error) {
 		log.Fatal("Error reading response. ", err)
 	}
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			log.Warnf("Failed to close response body: %v", err)
+		if cerr := res.Body.Close(); cerr != nil {
+			log.Warnf("Failed to close response body: %v", cerr)
 		}
 	}()
 
@@ -300,7 +300,7 @@ func Reddit(url string) (string, error) {
 		}
 
 		log.Warnf("Error decoding API response: %v", err)
-		return "", fmt.Errorf("error decoding reddit API response: %v", err)
+		return "", fmt.Errorf("error decoding reddit API response: %w", err)
 	}
 
 	// Check if we have valid data

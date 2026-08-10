@@ -62,8 +62,8 @@ func HackerNews(url string) (string, error) {
 		log.Fatal("Error reading response. ", err)
 	}
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			log.Warnf("Failed to close response body: %v", err)
+		if cerr := res.Body.Close(); cerr != nil {
+			log.Warnf("Failed to close response body: %v", cerr)
 		}
 	}()
 
@@ -73,7 +73,7 @@ func HackerNews(url string) (string, error) {
 
 	err = json.Unmarshal(body, &apiResponse)
 	if err != nil {
-		_ = fmt.Errorf("unable to unmarshal JSON response: %#v", err)
+		_ = fmt.Errorf("unable to unmarshal JSON response: %w", err)
 		return "", err
 	}
 

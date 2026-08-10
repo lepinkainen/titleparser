@@ -28,8 +28,8 @@ func YleAreena(url string) (string, error) {
 		return "", errors.Wrap(err, "Could not load HTML")
 	}
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			log.Warnf("Failed to close response body: %v", err)
+		if cerr := res.Body.Close(); cerr != nil {
+			log.Warnf("Failed to close response body: %v", cerr)
 		}
 	}()
 

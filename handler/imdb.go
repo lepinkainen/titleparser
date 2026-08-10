@@ -54,8 +54,8 @@ func OMDB(url string) (string, error) {
 		log.Fatal(err)
 	}
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			log.Warnf("Failed to close response body: %v", err)
+		if cerr := res.Body.Close(); cerr != nil {
+			log.Warnf("Failed to close response body: %v", cerr)
 		}
 	}()
 	if res.StatusCode != 200 {

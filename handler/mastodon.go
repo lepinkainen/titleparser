@@ -146,8 +146,8 @@ func fetchStatusInfo(instance, statusID string) (*MastodonStatus, error) {
 		return nil, errors.Wrap(err, "error sending request")
 	}
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			log.Warnf("Failed to close response body: %v", err)
+		if cerr := res.Body.Close(); cerr != nil {
+			log.Warnf("Failed to close response body: %v", cerr)
 		}
 	}()
 
@@ -291,8 +291,8 @@ func fallbackToScraping(url string) (string, error) {
 		return "", err
 	}
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			log.Warnf("Failed to close response body: %v", err)
+		if cerr := res.Body.Close(); cerr != nil {
+			log.Warnf("Failed to close response body: %v", cerr)
 		}
 	}()
 

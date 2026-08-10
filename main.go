@@ -8,6 +8,7 @@ import (
 	"html"
 	"net/http"
 	"os"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 
@@ -90,12 +91,12 @@ func main() {
 
 		res, err := lambda.HandleRequest(context.Background(), query)
 		if err != nil {
-			_ = fmt.Errorf("error handling request: %#v", err)
+			_ = fmt.Errorf("error handling request: %w", err)
 		}
 
 		q, err := json.Marshal(res)
 		if err != nil {
-			_ = fmt.Errorf("error marshaling response JSON: %#v", err)
+			_ = fmt.Errorf("error marshaling response JSON: %w", err)
 		}
 
 		if _, err := fmt.Fprint(w, string(q)); err != nil {
@@ -103,6 +104,13 @@ func main() {
 		}
 	})
 
-	log.Fatal(http.ListenAndServe("127.0.0.1:8081", nil))
+	srv := &http.Server{
+		Addr:              "127.0.0.1:8081",
+		ReadHeaderTimeout: 10 * time.Second,
+		ReadTimeout:       30 * time.Second,
+		WriteTimeout:      30 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
+	log.Fatal(srv.ListenAndServe())
 
 }
