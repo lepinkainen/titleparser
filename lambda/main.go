@@ -16,12 +16,12 @@ var (
 
 // TitleQuery received via HTTP(s)
 type TitleQuery struct {
-	Added   int64  `json:"timestamp"`
-	User    string `json:"user"`
-	Channel string `json:"channel"`
-	URL     string `json:"url"`
-	Title   string `json:"title"`
-	TTL     int64  `json:"ttl"` // TTL is used to expire the item in DynamoDB automatically
+	Added   int64  `json:"timestamp" dynamodbav:"timestamp"`
+	User    string `json:"user" dynamodbav:"user"`
+	Channel string `json:"channel" dynamodbav:"channel"`
+	URL     string `json:"url" dynamodbav:"url"`
+	Title   string `json:"title" dynamodbav:"title"`
+	TTL     int64  `json:"ttl" dynamodbav:"ttl"` // TTL is used to expire the item in DynamoDB automatically
 }
 
 type handlerFunc func(string) (string, error)
