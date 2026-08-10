@@ -3,17 +3,17 @@ module github.com/lepinkainen/titleparser
 go 1.26.1
 
 require (
-	github.com/PuerkitoBio/goquery v1.10.3
-	github.com/aws/aws-lambda-go v1.49.0
+	github.com/PuerkitoBio/goquery v1.12.0
+	github.com/aws/aws-lambda-go v1.54.0
 	github.com/aws/aws-sdk-go-v2 v1.43.5
 	github.com/aws/aws-sdk-go-v2/config v1.32.36
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.60
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.63.2
 	github.com/dustin/go-humanize v1.0.1
 	github.com/joho/godotenv v1.5.1
-	github.com/magefile/mage v1.15.0
+	github.com/magefile/mage v1.17.2
 	github.com/pkg/errors v0.9.1
-	github.com/sirupsen/logrus v1.9.3
+	github.com/sirupsen/logrus v1.9.4
 )
 
 require (
@@ -32,7 +32,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.38.5 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.45.5 // indirect
 	github.com/aws/smithy-go v1.27.7 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 )
